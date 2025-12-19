@@ -182,9 +182,9 @@ export default function Landing() {
           <img 
             src={heroImage} 
             alt="Кадастровые работы" 
-            className="w-full h-full object-cover opacity-60"
+            className="w-full h-full object-cover opacity-80"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10 py-20">
@@ -308,9 +308,9 @@ export default function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="glass p-8 rounded-2xl border border-white/10"
+                className="glass p-8 rounded-2xl border-2 border-white/20 neon-hover"
               >
-                <div className="w-12 h-12 bg-destructive/20 rounded-xl flex items-center justify-center mb-6">
+                <div className="w-14 h-14 bg-destructive/30 rounded-xl flex items-center justify-center mb-6 border border-destructive/50">
                   <span className="text-destructive text-2xl font-bold">{i + 1}</span>
                 </div>
                 <h3 className="text-xl font-bold text-white mb-4">{problem.title}</h3>
@@ -322,8 +322,12 @@ export default function Landing() {
       </section>
 
       {/* --- WHY US SECTION --- */}
-      <section id="why-us" className="py-20 lg:py-28 bg-card" data-testid="section-why-us">
-        <div className="container mx-auto px-4">
+      <section id="why-us" className="py-20 lg:py-28 relative" data-testid="section-why-us">
+        <div className="absolute inset-0 z-0">
+          <img src={surveyorImage} alt="" className="w-full h-full object-cover opacity-15" />
+          <div className="absolute inset-0 bg-gradient-to-b from-card via-card/95 to-card" />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -351,7 +355,7 @@ export default function Landing() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
-                className="p-6 rounded-xl bg-background/50 border border-white/5 hover:border-primary/30 transition-colors"
+                className="p-6 rounded-xl bg-card/80 border-2 border-white/15 neon-hover"
               >
                 <item.icon className="w-8 h-8 text-primary mb-4" />
                 <h3 className="font-bold text-white mb-2">{item.title}</h3>
@@ -365,8 +369,8 @@ export default function Landing() {
       {/* --- SERVICES SECTION --- */}
       <section id="services" className="py-20 lg:py-28 relative" data-testid="section-services">
         <div className="absolute inset-0 z-0">
-          <img src={documentsImage} alt="" className="w-full h-full object-cover opacity-10" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/98 to-background" />
+          <img src={constructionImage} alt="" className="w-full h-full object-cover opacity-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/90 to-background/95" />
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
@@ -390,20 +394,21 @@ export default function Landing() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05 }}
-                  className="relative rounded-2xl border border-white/10 hover:border-primary/50 transition-all duration-300 group overflow-hidden"
+                  className="relative rounded-2xl border-2 border-white/20 neon-hover group overflow-hidden bg-card"
                   data-testid={`card-service-${service.id}`}
                 >
-                  <div className="absolute inset-0 z-0">
-                    <img src={serviceImage} alt={service.title} className="w-full h-full object-cover opacity-20 group-hover:opacity-30 transition-opacity duration-300" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-card via-card/95 to-card/80" />
+                  <div className="h-48 overflow-hidden">
+                    <img 
+                      src={serviceImage} 
+                      alt={service.title} 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                    />
+                    <div className="absolute inset-0 h-48 bg-gradient-to-t from-card via-card/60 to-transparent" />
                   </div>
-                  <div className="relative z-10 p-8">
-                    <div className="w-16 h-16 rounded-xl overflow-hidden mb-6 border border-white/20 group-hover:border-primary/50 transition-colors">
-                      <img src={serviceImage} alt={service.title} className="w-full h-full object-cover" />
-                    </div>
+                  <div className="relative z-10 p-6 -mt-12">
                     <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">{service.title}</h3>
                     <p className="text-muted-foreground mb-6 leading-relaxed">{service.description}</p>
-                    <div className="flex items-center justify-between pt-6 border-t border-white/10 group-hover:border-primary/30 transition-colors">
+                    <div className="flex items-center justify-between pt-4 border-t border-white/10 group-hover:border-primary/50 transition-colors">
                       <span className="font-bold text-2xl gradient-text">{service.price}</span>
                       <ScrollLink to="contact" smooth={true} offset={-100}>
                         <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80 hover:bg-primary/10">
@@ -478,8 +483,8 @@ export default function Landing() {
       {/* --- TESTIMONIALS SECTION --- */}
       <section id="testimonials" className="py-20 lg:py-28 relative" data-testid="section-testimonials">
         <div className="absolute inset-0 z-0">
-          <img src={documentsImage} alt="" className="w-full h-full object-cover opacity-10" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/98 to-background" />
+          <img src={documentsImage} alt="" className="w-full h-full object-cover opacity-25" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/85 to-background/90" />
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <motion.div 
@@ -500,7 +505,7 @@ export default function Landing() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="glass p-8 rounded-2xl border border-white/10 hover:border-primary/40 transition-all duration-300"
+                className="glass p-8 rounded-2xl border-2 border-white/20 neon-hover"
                 data-testid={`card-testimonial-${review.id}`}
               >
                 <div className="flex gap-1 mb-6">
