@@ -61,7 +61,7 @@ function AnimatedCounter({ value }: { value: string }) {
   );
 }
 
-import heroImage from "@assets/stock_images/russian_countryside__8eb74b29.jpg";
+import heroImage from "@assets/generated_images/surveyor_with_theodolite_russian_dacha.png";
 import surveyorImage from "@assets/stock_images/land_surveyor_engine_61e75307.jpg";
 import aerialImage from "@assets/stock_images/aerial_view_city_urb_00bb8fa2.jpg";
 import documentsImage from "@assets/stock_images/house_real_estate_pr_6dcb4331.jpg";
