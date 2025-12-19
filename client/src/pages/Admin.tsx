@@ -1,18 +1,34 @@
 import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { useContent, useUpdateContent, useInquiries } from "@/hooks/use-content";
-import { queryClient } from "@/lib/queryClient";
+import { useContent, useUpdateContent } from "@/hooks/use-content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Save, LayoutDashboard, Plus, Trash2, LogOut, Eye } from "lucide-react";
+import { Loader2, Save, LayoutDashboard, Plus, Trash2, LogOut, Eye, FileText, MapPin, Users, Clock, Home, Building, Ruler, TreePine, Mountain, Map, Landmark, HardHat, Compass, PenTool, Scale, Shield, Award, CheckCircle, Phone, Mail, MessageCircle } from "lucide-react";
 import { Link } from "wouter";
-import { format } from "date-fns";
-import { ru } from "date-fns/locale";
+
+const ICON_OPTIONS = [
+  { value: "FileText", label: "Документ", Icon: FileText },
+  { value: "MapPin", label: "Метка", Icon: MapPin },
+  { value: "Home", label: "Дом", Icon: Home },
+  { value: "Building", label: "Здание", Icon: Building },
+  { value: "Ruler", label: "Линейка", Icon: Ruler },
+  { value: "TreePine", label: "Дерево", Icon: TreePine },
+  { value: "Mountain", label: "Гора", Icon: Mountain },
+  { value: "Map", label: "Карта", Icon: Map },
+  { value: "Landmark", label: "Ориентир", Icon: Landmark },
+  { value: "HardHat", label: "Каска", Icon: HardHat },
+  { value: "Compass", label: "Компас", Icon: Compass },
+  { value: "PenTool", label: "Перо", Icon: PenTool },
+  { value: "Scale", label: "Весы", Icon: Scale },
+  { value: "Shield", label: "Щит", Icon: Shield },
+  { value: "Award", label: "Награда", Icon: Award },
+  { value: "CheckCircle", label: "Галочка", Icon: CheckCircle },
+];
 
 function LoginScreen({ onLogin }: { onLogin: () => void }) {
   const [pass, setPass] = useState("");
@@ -80,7 +96,7 @@ function HeroEditor({ data }: { data: any }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex justify-between items-center">
+        <CardTitle className="flex justify-between items-center gap-2 flex-wrap">
           Первый экран (Hero)
           <Button onClick={handleSave} disabled={isPending} size="sm" data-testid="button-save-hero">
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -118,6 +134,102 @@ function HeroEditor({ data }: { data: any }) {
   );
 }
 
+function StatsEditor({ data }: { data: any }) {
+  const { mutate, isPending } = useUpdateContent();
+  const { toast } = useToast();
+  const [form, setForm] = useState({
+    years: "",
+    projects: "",
+    landArea: "",
+    satisfaction: "",
+  });
+
+  useEffect(() => {
+    if (data) {
+      setForm({
+        years: data.years || "",
+        projects: data.projects || "",
+        landArea: data.landArea || "",
+        satisfaction: data.satisfaction || "",
+      });
+    }
+  }, [data]);
+
+  const handleSave = () => {
+    mutate({ key: "stats", value: form }, {
+      onSuccess: () => toast({ title: "Статистика сохранена!" }),
+      onError: () => toast({ title: "Ошибка", variant: "destructive" })
+    });
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex justify-between items-center gap-2 flex-wrap">
+          Статистика в цифрах
+          <Button onClick={handleSave} disabled={isPending} size="sm" data-testid="button-save-stats">
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Save className="mr-2 h-4 w-4" /> Сохранить
+          </Button>
+        </CardTitle>
+        <CardDescription>Цифры отображаются под главным экраном</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="flex items-center gap-3 p-3 border rounded-lg">
+            <Clock className="w-8 h-8 text-primary shrink-0" />
+            <div className="flex-1">
+              <Label>Лет опыта</Label>
+              <Input 
+                value={form.years} 
+                onChange={(e) => setForm({ ...form, years: e.target.value })}
+                placeholder="27+"
+                data-testid="input-stats-years"
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-3 p-3 border rounded-lg">
+            <FileText className="w-8 h-8 text-primary shrink-0" />
+            <div className="flex-1">
+              <Label>Оказанных услуг</Label>
+              <Input 
+                value={form.projects} 
+                onChange={(e) => setForm({ ...form, projects: e.target.value })}
+                placeholder="30,000+"
+                data-testid="input-stats-projects"
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-3 p-3 border rounded-lg">
+            <MapPin className="w-8 h-8 text-primary shrink-0" />
+            <div className="flex-1">
+              <Label>Межеваний</Label>
+              <Input 
+                value={form.landArea} 
+                onChange={(e) => setForm({ ...form, landArea: e.target.value })}
+                placeholder="30,000+"
+                data-testid="input-stats-landarea"
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-3 p-3 border rounded-lg">
+            <Users className="w-8 h-8 text-primary shrink-0" />
+            <div className="flex-1">
+              <Label>Довольных клиентов</Label>
+              <Input 
+                value={form.satisfaction} 
+                onChange={(e) => setForm({ ...form, satisfaction: e.target.value })}
+                placeholder="98%"
+                data-testid="input-stats-satisfaction"
+              />
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 function ContactsEditor({ data }: { data: any }) {
   const { mutate, isPending } = useUpdateContent();
   const { toast } = useToast();
@@ -126,6 +238,7 @@ function ContactsEditor({ data }: { data: any }) {
     phone2: "",
     email: "",
     whatsapp: "",
+    notificationEmail: "",
   });
 
   useEffect(() => {
@@ -135,6 +248,7 @@ function ContactsEditor({ data }: { data: any }) {
         phone2: data.phone2 || "",
         email: data.email || "",
         whatsapp: data.whatsapp || "",
+        notificationEmail: data.notificationEmail || "",
       });
     }
   }, [data]);
@@ -149,7 +263,7 @@ function ContactsEditor({ data }: { data: any }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex justify-between items-center">
+        <CardTitle className="flex justify-between items-center gap-2 flex-wrap">
           Контакты
           <Button onClick={handleSave} disabled={isPending} size="sm" data-testid="button-save-contacts">
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -159,41 +273,161 @@ function ContactsEditor({ data }: { data: any }) {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <Label>Телефон 1</Label>
-            <Input 
-              value={form.phone1} 
-              onChange={(e) => setForm({ ...form, phone1: e.target.value })}
-              data-testid="input-contact-phone1"
-            />
+          <div className="flex items-center gap-3 p-3 border rounded-lg">
+            <Phone className="w-6 h-6 text-primary shrink-0" />
+            <div className="flex-1">
+              <Label>Телефон 1</Label>
+              <Input 
+                value={form.phone1} 
+                onChange={(e) => setForm({ ...form, phone1: e.target.value })}
+                placeholder="+7 903 743-80-61"
+                data-testid="input-contact-phone1"
+              />
+            </div>
           </div>
-          <div>
-            <Label>Телефон 2</Label>
-            <Input 
-              value={form.phone2} 
-              onChange={(e) => setForm({ ...form, phone2: e.target.value })}
-              data-testid="input-contact-phone2"
-            />
+          <div className="flex items-center gap-3 p-3 border rounded-lg">
+            <Phone className="w-6 h-6 text-primary shrink-0" />
+            <div className="flex-1">
+              <Label>Телефон 2</Label>
+              <Input 
+                value={form.phone2} 
+                onChange={(e) => setForm({ ...form, phone2: e.target.value })}
+                placeholder="+7 906 770-06-97"
+                data-testid="input-contact-phone2"
+              />
+            </div>
           </div>
         </div>
         <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <Label>Email</Label>
-            <Input 
-              value={form.email} 
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              data-testid="input-contact-email"
-            />
+          <div className="flex items-center gap-3 p-3 border rounded-lg">
+            <Mail className="w-6 h-6 text-primary shrink-0" />
+            <div className="flex-1">
+              <Label>Email (показывается на сайте)</Label>
+              <Input 
+                value={form.email} 
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                placeholder="9037438061@mail.ru"
+                data-testid="input-contact-email"
+              />
+            </div>
           </div>
-          <div>
-            <Label>WhatsApp (только цифры)</Label>
-            <Input 
-              value={form.whatsapp} 
-              onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
-              data-testid="input-contact-whatsapp"
-            />
+          <div className="flex items-center gap-3 p-3 border rounded-lg">
+            <MessageCircle className="w-6 h-6 text-green-500 shrink-0" />
+            <div className="flex-1">
+              <Label>WhatsApp (только цифры)</Label>
+              <Input 
+                value={form.whatsapp} 
+                onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
+                placeholder="79037438061"
+                data-testid="input-contact-whatsapp"
+              />
+            </div>
           </div>
         </div>
+        <div className="p-4 border-2 border-dashed border-primary/30 rounded-lg bg-primary/5">
+          <div className="flex items-start gap-3">
+            <Mail className="w-6 h-6 text-primary shrink-0 mt-1" />
+            <div className="flex-1">
+              <Label className="text-base font-semibold">Email для получения заявок</Label>
+              <p className="text-sm text-muted-foreground mb-2">На этот адрес будут приходить заявки с формы на сайте</p>
+              <Input 
+                value={form.notificationEmail} 
+                onChange={(e) => setForm({ ...form, notificationEmail: e.target.value })}
+                placeholder="your-email@example.com"
+                data-testid="input-contact-notification-email"
+              />
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function MenuEditor({ data }: { data: any[] }) {
+  const { mutate, isPending } = useUpdateContent();
+  const { toast } = useToast();
+  const defaultMenu = [
+    { id: "1", label: "Услуги", to: "services" },
+    { id: "2", label: "Почему мы", to: "why-us" },
+    { id: "3", label: "Как работаем", to: "process" },
+    { id: "4", label: "Отзывы", to: "testimonials" },
+    { id: "5", label: "Контакты", to: "contact" },
+  ];
+  const [items, setItems] = useState(defaultMenu);
+
+  useEffect(() => {
+    if (data && Array.isArray(data) && data.length > 0) {
+      setItems(data);
+    }
+  }, [data]);
+
+  const handleSave = () => {
+    mutate({ key: "menu", value: items }, {
+      onSuccess: () => toast({ title: "Меню сохранено!" }),
+      onError: () => toast({ title: "Ошибка", variant: "destructive" })
+    });
+  };
+
+  const addItem = () => {
+    setItems([...items, { id: Date.now().toString(), label: "Новый пункт", to: "section-id" }]);
+  };
+
+  const removeItem = (id: string) => {
+    setItems(items.filter(i => i.id !== id));
+  };
+
+  const updateItem = (id: string, field: string, value: string) => {
+    setItems(items.map(i => i.id === id ? { ...i, [field]: value } : i));
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex justify-between items-center gap-2 flex-wrap">
+          Пункты меню
+          <div className="flex gap-2">
+            <Button onClick={addItem} variant="outline" size="sm" data-testid="button-add-menu">
+              <Plus className="mr-2 h-4 w-4" /> Добавить
+            </Button>
+            <Button onClick={handleSave} disabled={isPending} size="sm" data-testid="button-save-menu">
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              <Save className="mr-2 h-4 w-4" /> Сохранить
+            </Button>
+          </div>
+        </CardTitle>
+        <CardDescription>Пункты навигации в шапке сайта. ID секции - это якорь для прокрутки.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {items.map((item, i) => (
+          <div key={item.id} className="flex items-center gap-3 p-3 border rounded-lg">
+            <span className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-sm font-bold shrink-0">
+              {i + 1}
+            </span>
+            <div className="flex-1 grid sm:grid-cols-2 gap-2">
+              <Input 
+                value={item.label} 
+                onChange={(e) => updateItem(item.id, "label", e.target.value)}
+                placeholder="Название пункта"
+                data-testid={`input-menu-label-${item.id}`}
+              />
+              <Input 
+                value={item.to} 
+                onChange={(e) => updateItem(item.id, "to", e.target.value)}
+                placeholder="ID секции (services, contact...)"
+                data-testid={`input-menu-to-${item.id}`}
+              />
+            </div>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => removeItem(item.id)}
+              data-testid={`button-delete-menu-${item.id}`}
+            >
+              <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
+          </div>
+        ))}
       </CardContent>
     </Card>
   );
@@ -231,7 +465,7 @@ function ProcessEditor({ data }: { data: any }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex justify-between items-center">
+        <CardTitle className="flex justify-between items-center gap-2 flex-wrap">
           Как всё пройдёт (Процесс)
           <Button onClick={handleSave} disabled={isPending} size="sm" data-testid="button-save-process">
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -294,7 +528,8 @@ function ServicesEditor({ data }: { data: any[] }) {
       id: Date.now().toString(), 
       title: "Новая услуга", 
       description: "Описание услуги", 
-      price: "от 10 000 ₽" 
+      price: "от 10 000 ₽",
+      icon: "FileText"
     }]);
   };
 
@@ -304,6 +539,11 @@ function ServicesEditor({ data }: { data: any[] }) {
 
   const updateService = (id: string, field: string, value: string) => {
     setServices(services.map(s => s.id === id ? { ...s, [field]: value } : s));
+  };
+
+  const getIconComponent = (iconName: string) => {
+    const found = ICON_OPTIONS.find(i => i.value === iconName);
+    return found ? found.Icon : FileText;
   };
 
   return (
@@ -323,47 +563,76 @@ function ServicesEditor({ data }: { data: any[] }) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {services.map((service, i) => (
-          <div key={service.id} className="p-4 border rounded-lg space-y-3">
-            <div className="flex justify-between items-start">
-              <span className="text-sm text-muted-foreground">Услуга #{i + 1}</span>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={() => removeService(service.id)}
-                data-testid={`button-delete-service-${service.id}`}
-              >
-                <Trash2 className="h-4 w-4 text-destructive" />
-              </Button>
-            </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <Label>Название</Label>
-                <Input 
-                  value={service.title} 
-                  onChange={(e) => updateService(service.id, "title", e.target.value)}
-                  data-testid={`input-service-title-${service.id}`}
-                />
+        {services.map((service, i) => {
+          const IconComp = getIconComponent(service.icon || "FileText");
+          return (
+            <div key={service.id} className="p-4 border rounded-lg space-y-3">
+              <div className="flex justify-between items-start">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                    <IconComp className="w-5 h-5 text-primary" />
+                  </div>
+                  <span className="text-sm text-muted-foreground">Услуга #{i + 1}</span>
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={() => removeService(service.id)}
+                  data-testid={`button-delete-service-${service.id}`}
+                >
+                  <Trash2 className="h-4 w-4 text-destructive" />
+                </Button>
+              </div>
+              <div className="grid md:grid-cols-3 gap-4">
+                <div>
+                  <Label>Иконка</Label>
+                  <Select 
+                    value={service.icon || "FileText"} 
+                    onValueChange={(v) => updateService(service.id, "icon", v)}
+                  >
+                    <SelectTrigger data-testid={`select-service-icon-${service.id}`}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ICON_OPTIONS.map(opt => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          <div className="flex items-center gap-2">
+                            <opt.Icon className="w-4 h-4" />
+                            {opt.label}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Название</Label>
+                  <Input 
+                    value={service.title} 
+                    onChange={(e) => updateService(service.id, "title", e.target.value)}
+                    data-testid={`input-service-title-${service.id}`}
+                  />
+                </div>
+                <div>
+                  <Label>Цена</Label>
+                  <Input 
+                    value={service.price || ""} 
+                    onChange={(e) => updateService(service.id, "price", e.target.value)}
+                    data-testid={`input-service-price-${service.id}`}
+                  />
+                </div>
               </div>
               <div>
-                <Label>Цена</Label>
-                <Input 
-                  value={service.price || ""} 
-                  onChange={(e) => updateService(service.id, "price", e.target.value)}
-                  data-testid={`input-service-price-${service.id}`}
+                <Label>Описание</Label>
+                <Textarea 
+                  value={service.description} 
+                  onChange={(e) => updateService(service.id, "description", e.target.value)}
+                  data-testid={`input-service-description-${service.id}`}
                 />
               </div>
             </div>
-            <div>
-              <Label>Описание</Label>
-              <Textarea 
-                value={service.description} 
-                onChange={(e) => updateService(service.id, "description", e.target.value)}
-                data-testid={`input-service-description-${service.id}`}
-              />
-            </div>
-          </div>
-        ))}
+          );
+        })}
         {services.length === 0 && (
           <p className="text-center text-muted-foreground py-8">Нет услуг. Нажмите "Добавить" чтобы создать.</p>
         )}
@@ -475,58 +744,6 @@ function TestimonialsEditor({ data }: { data: any[] }) {
   );
 }
 
-function InquiriesTable() {
-  const { data: inquiries, isLoading } = useInquiries();
-
-  if (isLoading) return <div className="p-8 text-center">Загрузка заявок...</div>;
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Заявки с сайта</CardTitle>
-        <CardDescription>Список клиентов, оставивших контакты через форму.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
-            <thead className="bg-muted text-muted-foreground font-medium border-b">
-              <tr>
-                <th className="px-4 py-3">ID</th>
-                <th className="px-4 py-3">Дата</th>
-                <th className="px-4 py-3">Имя</th>
-                <th className="px-4 py-3">Телефон</th>
-                <th className="px-4 py-3">Статус</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {inquiries?.map((inq) => (
-                <tr key={inq.id} className="hover:bg-muted/50">
-                  <td className="px-4 py-3 text-muted-foreground">#{inq.id}</td>
-                  <td className="px-4 py-3">{inq.createdAt ? format(new Date(inq.createdAt), "dd MMM yyyy HH:mm", { locale: ru }) : "-"}</td>
-                  <td className="px-4 py-3 font-medium">{inq.name}</td>
-                  <td className="px-4 py-3">
-                    <a href={`tel:${inq.phone}`} className="text-primary hover:underline">{inq.phone}</a>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold dark:bg-blue-900 dark:text-blue-300">
-                      {inq.status === "new" ? "Новая" : inq.status === "contacted" ? "Связались" : inq.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-              {(!inquiries || inquiries.length === 0) && (
-                <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">Нет заявок</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
 export default function Admin() {
   const [isAuth, setIsAuth] = useState(false);
   const { data: content, isLoading } = useContent();
@@ -563,22 +780,23 @@ export default function Admin() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="inquiries" className="space-y-6">
+        <Tabs defaultValue="hero" className="space-y-6">
           <TabsList className="flex flex-wrap h-auto gap-1 bg-background border shadow-sm p-1">
-            <TabsTrigger value="inquiries" data-testid="tab-inquiries">Заявки</TabsTrigger>
             <TabsTrigger value="hero" data-testid="tab-hero">Главная</TabsTrigger>
+            <TabsTrigger value="stats" data-testid="tab-stats">Статистика</TabsTrigger>
             <TabsTrigger value="services" data-testid="tab-services">Услуги</TabsTrigger>
             <TabsTrigger value="process" data-testid="tab-process">Процесс</TabsTrigger>
             <TabsTrigger value="testimonials" data-testid="tab-testimonials">Отзывы</TabsTrigger>
             <TabsTrigger value="contacts" data-testid="tab-contacts">Контакты</TabsTrigger>
+            <TabsTrigger value="menu" data-testid="tab-menu">Меню</TabsTrigger>
           </TabsList>
-
-          <TabsContent value="inquiries">
-            <InquiriesTable />
-          </TabsContent>
 
           <TabsContent value="hero">
             <HeroEditor data={safeContent.hero} />
+          </TabsContent>
+
+          <TabsContent value="stats">
+            <StatsEditor data={safeContent.stats} />
           </TabsContent>
 
           <TabsContent value="services">
@@ -595,6 +813,10 @@ export default function Admin() {
 
           <TabsContent value="contacts">
             <ContactsEditor data={safeContent.contact} />
+          </TabsContent>
+
+          <TabsContent value="menu">
+            <MenuEditor data={safeContent.menu || []} />
           </TabsContent>
         </Tabs>
       </main>

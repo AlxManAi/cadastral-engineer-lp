@@ -82,9 +82,10 @@ const serviceImages = [blueprintImage, boundaryImage, demolitionImage, houseImag
 interface ContentData {
   hero: { title: string; subtitle: string; ctaText: string };
   stats: { years: string; projects: string; landArea: string; satisfaction: string };
-  contact: { phone1: string; phone2: string; email: string; whatsapp: string };
-  services: Array<{ id: string; title: string; description: string; price?: string }>;
+  contact: { phone1: string; phone2: string; email: string; whatsapp: string; notificationEmail?: string };
+  services: Array<{ id: string; title: string; description: string; price?: string; icon?: string }>;
   testimonials: Array<{ id: string; name: string; text: string; rating?: number }>;
+  menu: Array<{ id: string; label: string; to: string }>;
 }
 
 const DEFAULT_CONTENT: ContentData = {
@@ -117,6 +118,13 @@ const DEFAULT_CONTENT: ContentData = {
     { id: "1", name: "Алексей П.", text: "Быстро оформили дом, никаких проблем с документами. Рекомендую!", rating: 5 },
     { id: "2", name: "Марина С.", text: "Помогли с межеванием сложного участка. Спасибо за профессионализм!", rating: 5 },
     { id: "3", name: "Игорь В.", text: "Все четко, в срок и по адекватной цене. Работают на результат.", rating: 5 },
+  ],
+  menu: [
+    { id: "1", label: "Услуги", to: "services" },
+    { id: "2", label: "Почему мы", to: "why-us" },
+    { id: "3", label: "Как работаем", to: "process" },
+    { id: "4", label: "Отзывы", to: "testimonials" },
+    { id: "5", label: "Контакты", to: "contact" },
   ]
 };
 
@@ -162,15 +170,9 @@ export default function Landing() {
           </div>
 
           <nav className="hidden lg:flex items-center gap-8 font-medium text-gray-300">
-            {[
-              { label: 'Услуги', to: 'services' },
-              { label: 'Почему мы', to: 'why-us' },
-              { label: 'Как работаем', to: 'process' },
-              { label: 'Отзывы', to: 'testimonials' },
-              { label: 'Контакты', to: 'contact' }
-            ].map((item) => (
+            {content.menu.map((item) => (
               <ScrollLink 
-                key={item.to}
+                key={item.id}
                 to={item.to}
                 smooth={true}
                 offset={-100}
@@ -200,15 +202,15 @@ export default function Landing() {
             </SheetTrigger>
             <SheetContent className="bg-card border-white/10">
               <nav className="flex flex-col gap-6 mt-10 text-lg font-medium">
-                {['Услуги', 'Почему мы', 'Как работаем', 'Отзывы', 'Контакты'].map((item, i) => (
+                {content.menu.map((item) => (
                   <ScrollLink 
-                    key={i}
-                    to={item === 'Услуги' ? 'services' : item === 'Почему мы' ? 'why-us' : item === 'Как работаем' ? 'process' : item === 'Отзывы' ? 'testimonials' : 'contact'}
+                    key={item.id}
+                    to={item.to}
                     smooth={true}
                     offset={-100}
                     className="cursor-pointer text-foreground hover:text-primary"
                   >
-                    {item}
+                    {item.label}
                   </ScrollLink>
                 ))}
                 <div className="mt-8 border-t border-white/10 pt-8">
