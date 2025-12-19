@@ -4,8 +4,15 @@ import { Link as ScrollLink } from "react-scroll";
 import { 
   MapPin, Phone, Mail, ChevronRight, CheckCircle, 
   Ruler, FileText, Home, Shield, Award, Users,
-  Menu, Star, Clock, Target, Zap, Building, ArrowRight
+  Menu, Star, Clock, Target, Zap, Building, ArrowRight,
+  TreePine, Mountain, Map, Landmark, HardHat, Compass, PenTool, Scale
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  FileText, MapPin, Home, Building, Ruler, TreePine, Mountain, Map, 
+  Landmark, HardHat, Compass, PenTool, Scale, Shield, Award, CheckCircle
+};
 import { SiWhatsapp } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { 
@@ -170,7 +177,7 @@ export default function Landing() {
           </div>
 
           <nav className="hidden lg:flex items-center gap-8 font-medium text-gray-300">
-            {content.menu.map((item) => (
+            {(content.menu && content.menu.length > 0 ? content.menu : DEFAULT_CONTENT.menu).map((item) => (
               <ScrollLink 
                 key={item.id}
                 to={item.to}
@@ -202,7 +209,7 @@ export default function Landing() {
             </SheetTrigger>
             <SheetContent className="bg-card border-white/10">
               <nav className="flex flex-col gap-6 mt-10 text-lg font-medium">
-                {content.menu.map((item) => (
+                {(content.menu && content.menu.length > 0 ? content.menu : DEFAULT_CONTENT.menu).map((item) => (
                   <ScrollLink 
                     key={item.id}
                     to={item.to}
@@ -452,6 +459,7 @@ export default function Landing() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {content.services.map((service, i) => {
               const serviceImage = serviceImages[i % serviceImages.length];
+              const ServiceIcon = service.icon && ICON_MAP[service.icon] ? ICON_MAP[service.icon] : FileText;
               return (
                 <motion.div
                   key={service.id}
@@ -469,6 +477,9 @@ export default function Landing() {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                     />
                     <div className="absolute inset-0 h-48 bg-gradient-to-t from-card via-card/60 to-transparent" />
+                  </div>
+                  <div className="absolute top-4 right-4 w-12 h-12 bg-primary/90 rounded-xl flex items-center justify-center shadow-lg">
+                    <ServiceIcon className="w-6 h-6 text-white" />
                   </div>
                   <div className="relative z-10 p-6 -mt-12">
                     <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">{service.title}</h3>

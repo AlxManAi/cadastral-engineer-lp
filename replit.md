@@ -2,16 +2,36 @@
 
 ## Overview
 
-A professional landing page for a cadastral engineer (кадастровый инженер) service with a dark, modern, premium design. The application features atmospheric background images and thematic service images to create immersion in the topic. The design uses a dark theme with emerald green (#10b981) primary color and clear contrasting colors for a professional, expensive, trustworthy look.
+A professional landing page for a cadastral engineer (кадастровый инженер) service with a dark, modern, premium design. The application features atmospheric background images and thematic service images to create immersion in the topic. The design uses a dark theme with blue (#3b82f6) primary color and orange accent for a professional, expensive, trustworthy look.
 
 Marketing structure follows conversion flow: awareness → interest → desire → action. Uses real data from geodezist37.ru and kadastr-online.ru websites.
+
+## Admin Panel
+- **URL**: `/admin`
+- **Password**: `admin123`
+- **Features**:
+  - Hero section editor (title, subtitle, button text)
+  - Statistics editor (years, projects, surveys, satisfaction %)
+  - Services CRUD with icon selector
+  - Process steps editor
+  - Testimonials CRUD
+  - Contacts editor (phones, email, WhatsApp, notification email)
+  - Navigation menu editor
+
+## Email Notifications (TODO)
+- Currently inquiries are saved to database only
+- `notificationEmail` field in contacts is prepared for future email integration
+- To enable email notifications: connect Resend or SendGrid integration when ready
+- Contact data: +7 903 743-80-61, +7 906 770-06-97, 9037438061@mail.ru, WhatsApp 79037438061
 
 ## Recent Changes (December 2024)
 - Implemented dark premium theme with glassmorphism effects
 - Added 9 atmospheric stock images (surveyors, aerial views, documents, construction)
 - Built conversion-optimized landing page with 8 sections: Hero, Stats, Problems, Why Us, Services, Process, Testimonials, Contact
-- Real contact data: +7 903 743-80-61, +7 906 770-06-97, 9037438061@mail.ru, WhatsApp 79037438061
-- Services with real prices from kadastr-online.ru (8k-20k rubles)
+- Added full admin panel with form-based editors
+- Dynamic navigation menu from admin panel
+- Icon selector for services
+- Statistics section editable from admin
 
 ## User Preferences
 
