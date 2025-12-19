@@ -10,9 +10,10 @@ Marketing structure follows conversion flow: awareness → interest → desire �
 - **URL**: `/admin`
 - **Password**: `admin123`
 - **Features**:
-  - Hero section editor (title, subtitle, button text)
+  - Hero section editor (title, subtitle, button text, background image upload)
   - Statistics editor (years, projects, surveys, satisfaction %)
-  - Services CRUD with icon selector
+  - Problems section editor (with image upload per problem)
+  - Services CRUD with icon selector (uses stock images)
   - Process steps editor
   - Testimonials CRUD
   - Contacts editor (phones, email, WhatsApp, notification email)
