@@ -73,5 +73,12 @@ export const TestimonialItemSchema = z.object({
   id: z.string(),
   name: z.string(),
   text: z.string(),
+  role: z.string().optional(),
   rating: z.number().optional(),
+});
+
+export const ProcessStepSchema = z.object({
+  number: z.string(),
+  title: z.string(),
+  text: z.string(),
 });
