@@ -513,6 +513,104 @@ function MenuEditor({ data }: { data: any[] }) {
   );
 }
 
+function ProblemsEditor({ data }: { data: any[] }) {
+  const { mutate, isPending } = useUpdateContent();
+  const { toast } = useToast();
+  const [problems, setProblems] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (data && Array.isArray(data)) {
+      setProblems(data);
+    }
+  }, [data]);
+
+  const handleSave = () => {
+    mutate({ key: "problems", value: problems }, {
+      onSuccess: () => toast({ title: "Проблемы сохранены!" }),
+      onError: () => toast({ title: "Ошибка", variant: "destructive" })
+    });
+  };
+
+  const addProblem = () => {
+    setProblems([...problems, { 
+      id: Date.now().toString(), 
+      title: "Новая проблема", 
+      text: "Описание проблемы",
+      image: ""
+    }]);
+  };
+
+  const removeProblem = (id: string) => {
+    setProblems(problems.filter(p => p.id !== id));
+  };
+
+  const updateProblem = (id: string, field: string, value: string) => {
+    setProblems(problems.map(p => p.id === id ? { ...p, [field]: value } : p));
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex justify-between items-center flex-wrap gap-2">
+          Вам знакомы эти проблемы?
+          <div className="flex gap-2">
+            <Button onClick={addProblem} variant="outline" size="sm" data-testid="button-add-problem">
+              <Plus className="mr-2 h-4 w-4" /> Добавить
+            </Button>
+            <Button onClick={handleSave} disabled={isPending} size="sm" data-testid="button-save-problems">
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              <Save className="mr-2 h-4 w-4" /> Сохранить
+            </Button>
+          </div>
+        </CardTitle>
+        <CardDescription>Секция с проблемами клиентов (с изображениями)</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {problems.map((problem, i) => (
+          <div key={problem.id} className="p-4 border rounded-lg space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="font-semibold">Проблема #{i + 1}</span>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => removeProblem(problem.id)}
+                data-testid={`button-delete-problem-${problem.id}`}
+              >
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            </div>
+            <div>
+              <Label>Заголовок</Label>
+              <Input 
+                value={problem.title} 
+                onChange={(e) => updateProblem(problem.id, "title", e.target.value)}
+                data-testid={`input-problem-title-${problem.id}`}
+              />
+            </div>
+            <div>
+              <Label>Описание</Label>
+              <Textarea 
+                value={problem.text} 
+                onChange={(e) => updateProblem(problem.id, "text", e.target.value)}
+                data-testid={`input-problem-text-${problem.id}`}
+              />
+            </div>
+            <ImageUpload
+              value={problem.image || ""}
+              onChange={(url) => updateProblem(problem.id, "image", url)}
+              label="Изображение проблемы"
+              hint="Рекомендуемый размер: 600x400 px (3:2)"
+            />
+          </div>
+        ))}
+        {problems.length === 0 && (
+          <p className="text-center text-muted-foreground py-8">Нет проблем. Нажмите "Добавить" чтобы создать.</p>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 function ProcessEditor({ data }: { data: any }) {
   const { mutate, isPending } = useUpdateContent();
   const { toast } = useToast();
@@ -609,8 +707,7 @@ function ServicesEditor({ data }: { data: any[] }) {
       title: "Новая услуга", 
       description: "Описание услуги", 
       price: "от 10 000 ₽",
-      icon: "FileText",
-      image: ""
+      icon: "FileText"
     }]);
   };
 
@@ -711,12 +808,6 @@ function ServicesEditor({ data }: { data: any[] }) {
                   data-testid={`input-service-description-${service.id}`}
                 />
               </div>
-              <ImageUpload
-                value={service.image || ""}
-                onChange={(url) => updateService(service.id, "image", url)}
-                label="Изображение услуги"
-                hint="Рекомендуемый размер: 600x400 px (3:2)"
-              />
             </div>
           );
         })}
@@ -871,6 +962,7 @@ export default function Admin() {
           <TabsList className="flex flex-wrap h-auto gap-1 bg-background border shadow-sm p-1">
             <TabsTrigger value="hero" data-testid="tab-hero">Главная</TabsTrigger>
             <TabsTrigger value="stats" data-testid="tab-stats">Статистика</TabsTrigger>
+            <TabsTrigger value="problems" data-testid="tab-problems">Проблемы</TabsTrigger>
             <TabsTrigger value="services" data-testid="tab-services">Услуги</TabsTrigger>
             <TabsTrigger value="process" data-testid="tab-process">Процесс</TabsTrigger>
             <TabsTrigger value="testimonials" data-testid="tab-testimonials">Отзывы</TabsTrigger>
@@ -884,6 +976,10 @@ export default function Admin() {
 
           <TabsContent value="stats">
             <StatsEditor data={safeContent.stats} />
+          </TabsContent>
+
+          <TabsContent value="problems">
+            <ProblemsEditor data={safeContent.problems || []} />
           </TabsContent>
 
           <TabsContent value="services">

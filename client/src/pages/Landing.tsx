@@ -90,7 +90,8 @@ interface ContentData {
   hero: { title: string; subtitle: string; ctaText: string; backgroundImage?: string };
   stats: { years: string; projects: string; landArea: string; satisfaction: string };
   contact: { phone1: string; phone2: string; email: string; whatsapp: string; notificationEmail?: string };
-  services: Array<{ id: string; title: string; description: string; price?: string; icon?: string; image?: string }>;
+  services: Array<{ id: string; title: string; description: string; price?: string; icon?: string }>;
+  problems: Array<{ id: string; title: string; text: string; image?: string }>;
   testimonials: Array<{ id: string; name: string; text: string; rating?: number }>;
   menu: Array<{ id: string; label: string; to: string }>;
 }
@@ -115,12 +116,17 @@ const DEFAULT_CONTENT: ContentData = {
     whatsapp: "79037438061"
   },
   services: [
-    { id: "1", title: "Технический план объекта", description: "Для постановки дома, бани, гаража на кадастровый учет", price: "от 8 000 ₽", icon: "FileText", image: "" },
-    { id: "2", title: "Межевой план", description: "Определение и закрепление границ земельного участка", price: "от 7 000 ₽", icon: "MapPin", image: "" },
-    { id: "3", title: "Акт обследования", description: "Для снятия объекта с учета при сносе", price: "от 5 000 ₽", icon: "Ruler", image: "" },
-    { id: "4", title: "Перевод в жилое", description: "Перевод нежилого дома в СНТ в жилой", price: "от 18 000 ₽", icon: "Home", image: "" },
-    { id: "5", title: "Экспертиза объекта", description: "Строительная и землеустроительная экспертиза", price: "от 20 000 ₽", icon: "Scale", image: "" },
-    { id: "6", title: "Консультация", description: "Бесплатная консультация по земельно-имущественным вопросам", price: "Бесплатно", icon: "Award", image: "" },
+    { id: "1", title: "Технический план объекта", description: "Для постановки дома, бани, гаража на кадастровый учет", price: "от 8 000 ₽", icon: "FileText" },
+    { id: "2", title: "Межевой план", description: "Определение и закрепление границ земельного участка", price: "от 7 000 ₽", icon: "MapPin" },
+    { id: "3", title: "Акт обследования", description: "Для снятия объекта с учета при сносе", price: "от 5 000 ₽", icon: "Ruler" },
+    { id: "4", title: "Перевод в жилое", description: "Перевод нежилого дома в СНТ в жилой", price: "от 18 000 ₽", icon: "Home" },
+    { id: "5", title: "Экспертиза объекта", description: "Строительная и землеустроительная экспертиза", price: "от 20 000 ₽", icon: "Scale" },
+    { id: "6", title: "Консультация", description: "Бесплатная консультация по земельно-имущественным вопросам", price: "Бесплатно", icon: "Award" },
+  ],
+  problems: [
+    { id: "1", title: "Отсутствие договора на результат", text: "Обычно заключают договор на разработку плана, а посещение кадастровой палаты остается вашей проблемой. Мы заключаем договор на результат - получение кадастрового паспорта.", image: "" },
+    { id: "2", title: "Отсутствие оптимального решения", text: "Не зная всех механизмов, инженер не может определить оптимальный путь. Бездумная работа приводит к проблемам на следующих этапах. У нас работают сертифицированные инженеры.", image: "" },
+    { id: "3", title: "Незнание законодательства", text: "Работа по привычному пути приводит к неактуальным этапам работ, что увеличивает бюджет и сроки. Мы следим за изменениями и используем актуальные методы.", image: "" },
   ],
   testimonials: [
     { id: "1", name: "Алексей П.", text: "Быстро оформили дом, никаких проблем с документами. Рекомендую!", rating: 5 },
@@ -350,44 +356,33 @@ export default function Landing() {
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { 
-                title: "Отсутствие договора на результат", 
-                text: "Обычно заключают договор на разработку плана, а посещение кадастровой палаты остается вашей проблемой. Мы заключаем договор на результат - получение кадастрового паспорта.",
-                image: frustatedWoman1
-              },
-              { 
-                title: "Отсутствие оптимального решения", 
-                text: "Не зная всех механизмов, инженер не может определить оптимальный путь. Бездумная работа приводит к проблемам на следующих этапах. У нас работают сертифицированные инженеры.",
-                image: confusedMan
-              },
-              { 
-                title: "Незнание законодательства", 
-                text: "Работа по привычному пути приводит к неактуальным этапам работ, что увеличивает бюджет и сроки. Мы следим за изменениями и используем актуальные методы.",
-                image: worriedWoman
-              }
-            ].map((problem, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="rounded-2xl border-2 border-white/20 hover:border-orange-500/50 transition-all duration-300 hover:shadow-[0_0_25px_rgba(249,115,22,0.3)] overflow-hidden bg-card group"
-              >
-                <div className="h-56 overflow-hidden relative">
-                  <img src={problem.image} alt={problem.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
-                  <div className="absolute top-4 left-4 w-12 h-12 bg-orange-500/90 rounded-xl flex items-center justify-center shadow-lg">
-                    <span className="text-white text-xl font-bold">{i + 1}</span>
+            {(content.problems || DEFAULT_CONTENT.problems).map((problem, i) => {
+              const fallbackImages = [frustatedWoman1, confusedMan, worriedWoman];
+              const problemImage = problem.image || fallbackImages[i % fallbackImages.length];
+              return (
+                <motion.div
+                  key={problem.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="rounded-2xl border-2 border-white/20 hover:border-orange-500/50 transition-all duration-300 hover:shadow-[0_0_25px_rgba(249,115,22,0.3)] overflow-hidden bg-card group"
+                  data-testid={`problem-card-${problem.id}`}
+                >
+                  <div className="h-56 overflow-hidden relative">
+                    <img src={problemImage} alt={problem.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+                    <div className="absolute top-4 left-4 w-12 h-12 bg-orange-500/90 rounded-xl flex items-center justify-center shadow-lg">
+                      <span className="text-white text-xl font-bold">{i + 1}</span>
+                    </div>
                   </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-3">{problem.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{problem.text}</p>
-                </div>
-              </motion.div>
-            ))}
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-white mb-3">{problem.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed">{problem.text}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -459,7 +454,7 @@ export default function Landing() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {content.services.map((service, i) => {
-              const serviceImage = service.image || serviceImages[i % serviceImages.length];
+              const serviceImage = serviceImages[i % serviceImages.length];
               const ServiceIcon = service.icon && ICON_MAP[service.icon] ? ICON_MAP[service.icon] : FileText;
               return (
                 <motion.div
