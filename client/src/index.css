@@ -57,8 +57,8 @@
   --accent: 38 92% 50%;
   --accent-foreground: 0 0% 5%;
 
-  /* Destructive */
-  --destructive: 0 72% 51%;
+  /* Destructive - Changed to warm orange for contrast with blue */
+  --destructive: 25 95% 53%;
   --destructive-foreground: 0 0% 100%;
 
   /* Input */

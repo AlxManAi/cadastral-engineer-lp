@@ -73,6 +73,10 @@ import houseImage from "@assets/stock_images/cozy_family_house_co_6b77a853.jpg";
 import consultantImage from "@assets/stock_images/expert_professional__df23552f.jpg";
 import inspectionImage from "@assets/stock_images/building_inspection__0fcea4df.jpg";
 
+import frustatedWoman1 from "@assets/stock_images/frustrated_woman_hol_c0134158.jpg";
+import confusedMan from "@assets/stock_images/confused_elderly_man_a80af605.jpg";
+import worriedWoman from "@assets/stock_images/worried_middle_aged__d882b1ba.jpg";
+
 const serviceImages = [blueprintImage, boundaryImage, demolitionImage, houseImage, inspectionImage, consultantImage];
 
 interface ContentData {
@@ -339,15 +343,18 @@ export default function Landing() {
             {[
               { 
                 title: "Отсутствие договора на результат", 
-                text: "Обычно заключают договор на разработку плана, а посещение кадастровой палаты остается вашей проблемой. Мы заключаем договор на результат - получение кадастрового паспорта."
+                text: "Обычно заключают договор на разработку плана, а посещение кадастровой палаты остается вашей проблемой. Мы заключаем договор на результат - получение кадастрового паспорта.",
+                image: frustatedWoman1
               },
               { 
                 title: "Отсутствие оптимального решения", 
-                text: "Не зная всех механизмов, инженер не может определить оптимальный путь. Бездумная работа приводит к проблемам на следующих этапах. У нас работают сертифицированные инженеры."
+                text: "Не зная всех механизмов, инженер не может определить оптимальный путь. Бездумная работа приводит к проблемам на следующих этапах. У нас работают сертифицированные инженеры.",
+                image: confusedMan
               },
               { 
                 title: "Незнание законодательства", 
-                text: "Работа по привычному пути приводит к неактуальным этапам работ, что увеличивает бюджет и сроки. Мы следим за изменениями и используем актуальные методы."
+                text: "Работа по привычному пути приводит к неактуальным этапам работ, что увеличивает бюджет и сроки. Мы следим за изменениями и используем актуальные методы.",
+                image: worriedWoman
               }
             ].map((problem, i) => (
               <motion.div
@@ -356,13 +363,19 @@ export default function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="glass p-8 rounded-2xl border-2 border-white/20 neon-hover"
+                className="rounded-2xl border-2 border-white/20 hover:border-orange-500/50 transition-all duration-300 hover:shadow-[0_0_25px_rgba(249,115,22,0.3)] overflow-hidden bg-card group"
               >
-                <div className="w-14 h-14 bg-destructive/30 rounded-xl flex items-center justify-center mb-6 border border-destructive/50">
-                  <span className="text-destructive text-2xl font-bold">{i + 1}</span>
+                <div className="h-56 overflow-hidden relative">
+                  <img src={problem.image} alt={problem.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+                  <div className="absolute top-4 left-4 w-12 h-12 bg-orange-500/90 rounded-xl flex items-center justify-center shadow-lg">
+                    <span className="text-white text-xl font-bold">{i + 1}</span>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-4">{problem.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{problem.text}</p>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-white mb-3">{problem.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{problem.text}</p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -403,9 +416,11 @@ export default function Landing() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
-                className="p-6 rounded-xl bg-card/80 border-2 border-white/15 neon-hover"
+                className="p-6 rounded-xl glass border-2 border-white/15 neon-hover group"
               >
-                <item.icon className="w-8 h-8 text-primary mb-4" />
+                <div className="w-14 h-14 bg-gradient-to-br from-primary/30 to-blue-400/20 rounded-xl flex items-center justify-center mb-4 border border-primary/40 group-hover:border-primary/70 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all duration-300">
+                  <item.icon className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="font-bold text-white mb-2">{item.title}</h3>
                 <p className="text-sm text-muted-foreground">{item.text}</p>
               </motion.div>
