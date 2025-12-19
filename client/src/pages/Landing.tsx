@@ -18,6 +18,14 @@ import surveyorImage from "@assets/stock_images/land_surveyor_with_t_59d2feeb.jp
 import aerialImage from "@assets/stock_images/aerial_view_city_urb_00bb8fa2.jpg";
 import documentsImage from "@assets/stock_images/house_real_estate_pr_6dcb4331.jpg";
 import constructionImage from "@assets/stock_images/construction_site_me_609c5c58.jpg";
+import blueprintImage from "@assets/stock_images/technical_blueprint__31e57a1c.jpg";
+import boundaryImage from "@assets/stock_images/land_boundary_fence__7d51d31b.jpg";
+import demolitionImage from "@assets/stock_images/demolished_building__e8031f68.jpg";
+import houseImage from "@assets/stock_images/cozy_family_house_co_6b77a853.jpg";
+import consultantImage from "@assets/stock_images/expert_professional__df23552f.jpg";
+import inspectionImage from "@assets/stock_images/building_inspection__0fcea4df.jpg";
+
+const serviceImages = [blueprintImage, boundaryImage, demolitionImage, houseImage, inspectionImage, consultantImage];
 
 interface ContentData {
   hero: { title: string; subtitle: string; ctaText: string };
@@ -60,7 +68,6 @@ const DEFAULT_CONTENT: ContentData = {
   ]
 };
 
-const serviceIcons = [FileText, MapPin, Building, Home, Target, Users];
 
 function getWhatsAppUrl(whatsapp: string): string {
   if (whatsapp.startsWith('http')) return whatsapp;
@@ -175,10 +182,9 @@ export default function Landing() {
           <img 
             src={heroImage} 
             alt="Кадастровые работы" 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-60"
           />
-          <div className="hero-overlay absolute inset-0" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-background/40" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10 py-20">
@@ -376,7 +382,7 @@ export default function Landing() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {content.services.map((service, i) => {
-              const Icon = serviceIcons[i % serviceIcons.length];
+              const serviceImage = serviceImages[i % serviceImages.length];
               return (
                 <motion.div
                   key={service.id}
@@ -384,21 +390,27 @@ export default function Landing() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05 }}
-                  className="glass p-8 rounded-2xl border border-white/10 hover:border-primary/30 transition-all group"
+                  className="relative rounded-2xl border border-white/10 hover:border-primary/50 transition-all duration-300 group overflow-hidden"
                   data-testid={`card-service-${service.id}`}
                 >
-                  <div className="w-14 h-14 bg-primary/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/30 transition-colors">
-                    <Icon className="w-7 h-7 text-primary" />
+                  <div className="absolute inset-0 z-0">
+                    <img src={serviceImage} alt={service.title} className="w-full h-full object-cover opacity-20 group-hover:opacity-30 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-card via-card/95 to-card/80" />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">{service.title}</h3>
-                  <p className="text-muted-foreground mb-6 leading-relaxed">{service.description}</p>
-                  <div className="flex items-center justify-between pt-6 border-t border-white/10">
-                    <span className="font-bold text-2xl gradient-text">{service.price}</span>
-                    <ScrollLink to="contact" smooth={true} offset={-100}>
-                      <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80 hover:bg-primary/10">
-                        Заказать <ChevronRight className="w-4 h-4 ml-1" />
-                      </Button>
-                    </ScrollLink>
+                  <div className="relative z-10 p-8">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden mb-6 border border-white/20 group-hover:border-primary/50 transition-colors">
+                      <img src={serviceImage} alt={service.title} className="w-full h-full object-cover" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">{service.title}</h3>
+                    <p className="text-muted-foreground mb-6 leading-relaxed">{service.description}</p>
+                    <div className="flex items-center justify-between pt-6 border-t border-white/10 group-hover:border-primary/30 transition-colors">
+                      <span className="font-bold text-2xl gradient-text">{service.price}</span>
+                      <ScrollLink to="contact" smooth={true} offset={-100}>
+                        <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80 hover:bg-primary/10">
+                          Заказать <ChevronRight className="w-4 h-4 ml-1" />
+                        </Button>
+                      </ScrollLink>
+                    </div>
                   </div>
                 </motion.div>
               );
@@ -464,8 +476,12 @@ export default function Landing() {
       </section>
 
       {/* --- TESTIMONIALS SECTION --- */}
-      <section id="testimonials" className="py-20 lg:py-28" data-testid="section-testimonials">
-        <div className="container mx-auto px-4">
+      <section id="testimonials" className="py-20 lg:py-28 relative" data-testid="section-testimonials">
+        <div className="absolute inset-0 z-0">
+          <img src={documentsImage} alt="" className="w-full h-full object-cover opacity-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/98 to-background" />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -484,7 +500,7 @@ export default function Landing() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="glass p-8 rounded-2xl border border-white/10"
+                className="glass p-8 rounded-2xl border border-white/10 hover:border-primary/40 transition-all duration-300"
                 data-testid={`card-testimonial-${review.id}`}
               >
                 <div className="flex gap-1 mb-6">
