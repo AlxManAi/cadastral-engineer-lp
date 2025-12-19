@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { Link as ScrollLink } from "react-scroll";
 import { 
   MapPin, Phone, Mail, ChevronRight, CheckCircle, 
@@ -12,6 +13,53 @@ import {
 } from "@/components/ui/sheet";
 import { useContent } from "@/hooks/use-content";
 import { ContactForm } from "@/components/ContactForm";
+
+function AnimatedCounter({ value }: { value: string }) {
+  const [displayValue, setDisplayValue] = useState("0");
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true });
+  
+  useEffect(() => {
+    if (!isInView) return;
+    
+    const numMatch = value.match(/[\d,]+/);
+    if (!numMatch) {
+      setDisplayValue(value);
+      return;
+    }
+    
+    const numStr = numMatch[0].replace(/,/g, '');
+    const targetNum = parseInt(numStr, 10);
+    const suffix = value.replace(numMatch[0], '');
+    const hasComma = numMatch[0].includes(',');
+    
+    let start = 0;
+    const duration = 2000;
+    const startTime = Date.now();
+    
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(eased * targetNum);
+      
+      const formatted = hasComma ? current.toLocaleString() : current.toString();
+      setDisplayValue(formatted + suffix);
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+    
+    animate();
+  }, [isInView, value]);
+  
+  return (
+    <div ref={ref} className="text-4xl md:text-5xl font-bold gradient-text mb-2">
+      {displayValue}
+    </div>
+  );
+}
 
 import heroImage from "@assets/stock_images/land_surveyor_with_t_5b3b0229.jpg";
 import surveyorImage from "@assets/stock_images/land_surveyor_with_t_59d2feeb.jpg";
@@ -261,7 +309,7 @@ export default function Landing() {
                 data-testid={`stat-${i}`}
               >
                 <stat.icon className="w-8 h-8 text-primary mx-auto mb-4" />
-                <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">{stat.value}</div>
+                <AnimatedCounter value={stat.value} />
                 <div className="text-muted-foreground font-medium">{stat.label}</div>
               </motion.div>
             ))}
@@ -527,28 +575,38 @@ export default function Landing() {
       </section>
 
       {/* --- CTA BANNER --- */}
-      <section className="py-16 relative overflow-hidden" data-testid="section-cta-banner">
+      <section className="py-20 relative overflow-hidden" data-testid="section-cta-banner">
         <div className="absolute inset-0 z-0">
-          <img src={surveyorImage} alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-blue-600/90" />
+          <img src={aerialImage} alt="" className="w-full h-full object-cover opacity-40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background" />
         </div>
-        <div className="container mx-auto px-4 relative z-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Не откладывайте важные вопросы на потом</h2>
-          <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">Задайте свои вопросы прямо сейчас - это совершенно бесплатно</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a href={`tel:${content.contact.phone1.replace(/\s/g, '')}`}>
-              <Button size="lg" variant="secondary" className="h-14 px-8 text-lg bg-white text-primary hover:bg-white/90" data-testid="button-cta-call">
-                <Phone className="w-5 h-5 mr-2" />
-                {content.contact.phone1}
-              </Button>
-            </a>
-            <a href={getWhatsAppUrl(content.contact.whatsapp)} target="_blank" rel="noopener noreferrer">
-              <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-white/30 text-white hover:bg-white/10" data-testid="button-cta-whatsapp">
-                <SiWhatsapp className="w-5 h-5 mr-2" />
-                WhatsApp
-              </Button>
-            </a>
-          </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-3xl mx-auto text-center p-10 rounded-3xl glass border-2 border-primary/30 neon-glow"
+          >
+            <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-primary/50">
+              <Zap className="w-8 h-8 text-primary" />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Не откладывайте важные вопросы на потом</h2>
+            <p className="text-xl text-gray-300 mb-10 max-w-xl mx-auto">Задайте свои вопросы прямо сейчас - это совершенно бесплатно</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a href={`tel:${content.contact.phone1.replace(/\s/g, '')}`}>
+                <Button size="lg" className="h-14 px-8 text-lg bg-primary hover:bg-primary/90 shadow-xl neon-glow" data-testid="button-cta-call">
+                  <Phone className="w-5 h-5 mr-2" />
+                  {content.contact.phone1}
+                </Button>
+              </a>
+              <a href={getWhatsAppUrl(content.contact.whatsapp)} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-2 border-green-500/50 text-green-400 hover:bg-green-500/10 hover:border-green-400" data-testid="button-cta-whatsapp">
+                  <SiWhatsapp className="w-5 h-5 mr-2" />
+                  WhatsApp
+                </Button>
+              </a>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -566,8 +624,8 @@ export default function Landing() {
                 <p className="text-xl text-muted-foreground mb-8">Просто укажите имя и номер телефона. Перезвоним в течение 5 минут и расскажем все подробно.</p>
               </motion.div>
               
-              <div className="space-y-6">
-                <div className="flex items-center gap-4 p-4 glass rounded-xl">
+              <div className="space-y-4">
+                <div className="flex items-center gap-4 p-4 glass rounded-xl border-2 border-white/10 neon-hover cursor-pointer">
                   <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary">
                     <Phone className="w-6 h-6" />
                   </div>
@@ -578,7 +636,7 @@ export default function Landing() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 p-4 glass rounded-xl">
+                <div className="flex items-center gap-4 p-4 glass rounded-xl border-2 border-white/10 neon-hover cursor-pointer">
                   <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary">
                     <Mail className="w-6 h-6" />
                   </div>
@@ -588,7 +646,7 @@ export default function Landing() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 p-4 glass rounded-xl">
+                <div className="flex items-center gap-4 p-4 glass rounded-xl border-2 border-white/10 hover:border-green-500/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] cursor-pointer">
                   <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center text-green-400">
                     <SiWhatsapp className="w-6 h-6" />
                   </div>
@@ -598,7 +656,7 @@ export default function Landing() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 p-4 glass rounded-xl">
+                <div className="flex items-center gap-4 p-4 glass rounded-xl border-2 border-white/10 neon-hover">
                   <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary">
                     <MapPin className="w-6 h-6" />
                   </div>
@@ -612,8 +670,8 @@ export default function Landing() {
             </div>
 
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-blue-500/20 rounded-3xl blur-xl"></div>
-              <div className="relative glass p-8 rounded-2xl border border-white/10">
+              <div className="absolute -inset-4 bg-gradient-to-tr from-primary/30 to-blue-500/30 rounded-3xl blur-xl"></div>
+              <div className="relative glass p-8 rounded-2xl border-2 border-primary/30 neon-glow">
                 <ContactForm />
               </div>
             </div>
@@ -642,26 +700,26 @@ export default function Landing() {
             
             <div>
               <h4 className="font-bold text-white mb-4">Услуги</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>Технический план</li>
-                <li>Межевой план</li>
-                <li>Акт обследования</li>
-                <li>Экспертиза</li>
+              <ul className="space-y-2 text-sm">
+                <li><ScrollLink to="services" smooth={true} offset={-100} className="text-muted-foreground hover:text-primary cursor-pointer transition-colors">Технический план</ScrollLink></li>
+                <li><ScrollLink to="services" smooth={true} offset={-100} className="text-muted-foreground hover:text-primary cursor-pointer transition-colors">Межевой план</ScrollLink></li>
+                <li><ScrollLink to="services" smooth={true} offset={-100} className="text-muted-foreground hover:text-primary cursor-pointer transition-colors">Акт обследования</ScrollLink></li>
+                <li><ScrollLink to="services" smooth={true} offset={-100} className="text-muted-foreground hover:text-primary cursor-pointer transition-colors">Экспертиза</ScrollLink></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-bold text-white mb-4">Контакты</h4>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <div>{content.contact.phone1}</div>
-                <div>{content.contact.phone2}</div>
-                <div>{content.contact.email}</div>
+              <div className="space-y-2 text-sm">
+                <a href={`tel:${content.contact.phone1.replace(/\s/g, '')}`} className="block text-muted-foreground hover:text-primary transition-colors">{content.contact.phone1}</a>
+                <a href={`tel:${content.contact.phone2.replace(/\s/g, '')}`} className="block text-muted-foreground hover:text-primary transition-colors">{content.contact.phone2}</a>
+                <a href={`mailto:${content.contact.email}`} className="block text-muted-foreground hover:text-primary transition-colors">{content.contact.email}</a>
               </div>
             </div>
           </div>
           
           <div className="pt-8 border-t border-white/5 text-center text-sm text-muted-foreground">
-            <p>ООО Геодезия-БТИ. Все права защищены.</p>
+            <p>1997-2026 ООО Геодезия-БТИ. Все права защищены.</p>
           </div>
         </div>
       </footer>

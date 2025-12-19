@@ -90,7 +90,7 @@ export function ContactForm() {
                     <Input 
                       placeholder="Иван Иванов" 
                       {...field} 
-                      className="h-14 bg-background/50 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20" 
+                      className="h-14 bg-background/50 border-2 border-white/20 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 hover:border-primary/50 transition-all duration-300" 
                       data-testid="input-name"
                     />
                   </FormControl>
@@ -108,7 +108,7 @@ export function ContactForm() {
                     <Input 
                       placeholder="+7 (999) 000-00-00" 
                       {...field} 
-                      className="h-14 bg-background/50 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20" 
+                      className="h-14 bg-background/50 border-2 border-white/20 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 hover:border-primary/50 transition-all duration-300" 
                       data-testid="input-phone"
                     />
                   </FormControl>
