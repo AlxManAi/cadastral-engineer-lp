@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useContent, useUpdateContent } from "@/hooks/use-content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,8 +8,80 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Save, LayoutDashboard, Plus, Trash2, LogOut, Eye, FileText, MapPin, Users, Clock, Home, Building, Ruler, TreePine, Mountain, Map, Landmark, HardHat, Compass, PenTool, Scale, Shield, Award, CheckCircle, Phone, Mail, MessageCircle } from "lucide-react";
+import { Loader2, Save, LayoutDashboard, Plus, Trash2, LogOut, Eye, FileText, MapPin, Users, Clock, Home, Building, Ruler, TreePine, Mountain, Map, Landmark, HardHat, Compass, PenTool, Scale, Shield, Award, CheckCircle, Phone, Mail, MessageCircle, Upload, Image } from "lucide-react";
 import { Link } from "wouter";
+
+// Image upload component
+function ImageUpload({ 
+  value, 
+  onChange, 
+  label,
+  hint 
+}: { 
+  value: string; 
+  onChange: (url: string) => void;
+  label: string;
+  hint: string;
+}) {
+  const [uploading, setUploading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      onChange(data.url);
+      toast({ title: "Изображение загружено" });
+    } catch {
+      toast({ title: "Ошибка загрузки", variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      <Label>{label}</Label>
+      <p className="text-xs text-muted-foreground">{hint}</p>
+      <div className="flex gap-2 items-center flex-wrap">
+        <input 
+          ref={inputRef}
+          type="file" 
+          accept="image/*" 
+          className="hidden" 
+          onChange={handleUpload}
+        />
+        <Button 
+          type="button" 
+          variant="outline" 
+          onClick={() => inputRef.current?.click()}
+          disabled={uploading}
+          size="sm"
+        >
+          {uploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}
+          Обзор
+        </Button>
+        {value && (
+          <span className="text-sm text-muted-foreground truncate max-w-[200px]">{value}</span>
+        )}
+      </div>
+      {value && (
+        <div className="mt-2 relative w-32 h-20 rounded-md overflow-hidden border">
+          <img src={value} alt="Preview" className="w-full h-full object-cover" />
+        </div>
+      )}
+    </div>
+  );
+}
 
 const ICON_OPTIONS = [
   { value: "FileText", label: "Документ", Icon: FileText },
@@ -74,6 +146,7 @@ function HeroEditor({ data }: { data: any }) {
     title: "",
     subtitle: "",
     ctaText: "",
+    backgroundImage: "",
   });
 
   useEffect(() => {
@@ -82,6 +155,7 @@ function HeroEditor({ data }: { data: any }) {
         title: data.title || "",
         subtitle: data.subtitle || "",
         ctaText: data.ctaText || "",
+        backgroundImage: data.backgroundImage || "",
       });
     }
   }, [data]);
@@ -129,6 +203,12 @@ function HeroEditor({ data }: { data: any }) {
             data-testid="input-hero-cta"
           />
         </div>
+        <ImageUpload
+          value={form.backgroundImage}
+          onChange={(url) => setForm({ ...form, backgroundImage: url })}
+          label="Фоновое изображение"
+          hint="Рекомендуемый размер: 1920x1080 px (16:9)"
+        />
       </CardContent>
     </Card>
   );
@@ -529,7 +609,8 @@ function ServicesEditor({ data }: { data: any[] }) {
       title: "Новая услуга", 
       description: "Описание услуги", 
       price: "от 10 000 ₽",
-      icon: "FileText"
+      icon: "FileText",
+      image: ""
     }]);
   };
 
@@ -630,6 +711,12 @@ function ServicesEditor({ data }: { data: any[] }) {
                   data-testid={`input-service-description-${service.id}`}
                 />
               </div>
+              <ImageUpload
+                value={service.image || ""}
+                onChange={(url) => updateService(service.id, "image", url)}
+                label="Изображение услуги"
+                hint="Рекомендуемый размер: 600x400 px (3:2)"
+              />
             </div>
           );
         })}

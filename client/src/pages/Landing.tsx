@@ -241,7 +241,7 @@ export default function Landing() {
       <section className="relative min-h-screen flex items-center pt-20" data-testid="section-hero">
         <div className="absolute inset-0 z-0">
           <img 
-            src={heroImage} 
+            src={content.hero.backgroundImage || heroImage} 
             alt="Кадастровые работы" 
             className="w-full h-full object-cover opacity-80"
           />
@@ -458,7 +458,7 @@ export default function Landing() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {content.services.map((service, i) => {
-              const serviceImage = serviceImages[i % serviceImages.length];
+              const serviceImage = service.image || serviceImages[i % serviceImages.length];
               const ServiceIcon = service.icon && ICON_MAP[service.icon] ? ICON_MAP[service.icon] : FileText;
               return (
                 <motion.div
