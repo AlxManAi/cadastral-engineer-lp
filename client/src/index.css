@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Text rendering for crisp fonts */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Prevent horizontal overflow on mobile */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 /* DARK PREMIUM THEME - Default is dark */
 :root {
   --button-outline: rgba(255,255,255, .12);
@@ -249,7 +262,7 @@
 
   /* Glass effect */
   .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/20;
+    @apply bg-white/10 backdrop-blur-sm border border-white/20;
   }
 
   /* Neon glow on hover */

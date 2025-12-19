@@ -61,8 +61,8 @@ function AnimatedCounter({ value }: { value: string }) {
   );
 }
 
-import heroImage from "@assets/stock_images/land_surveyor_with_t_5b3b0229.jpg";
-import surveyorImage from "@assets/stock_images/land_surveyor_with_t_59d2feeb.jpg";
+import heroImage from "@assets/stock_images/russian_countryside__8eb74b29.jpg";
+import surveyorImage from "@assets/stock_images/land_surveyor_engine_61e75307.jpg";
 import aerialImage from "@assets/stock_images/aerial_view_city_urb_00bb8fa2.jpg";
 import documentsImage from "@assets/stock_images/house_real_estate_pr_6dcb4331.jpg";
 import constructionImage from "@assets/stock_images/construction_site_me_609c5c58.jpg";
@@ -239,8 +239,8 @@ export default function Landing() {
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent" />
         </div>
 
-        <div className="container mx-auto px-4 relative z-10 py-20">
-          <div className="max-w-3xl">
+        <div className="container mx-auto px-4 relative z-10 py-20 w-full">
+          <div className="w-full max-w-3xl">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
