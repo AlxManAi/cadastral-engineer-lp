@@ -87,10 +87,10 @@ import worriedWoman from "@assets/stock_images/worried_middle_aged__d882b1ba.jpg
 const serviceImages = [blueprintImage, boundaryImage, demolitionImage, houseImage, inspectionImage, consultantImage];
 
 interface ContentData {
-  hero: { title: string; subtitle: string; ctaText: string };
+  hero: { title: string; subtitle: string; ctaText: string; backgroundImage?: string };
   stats: { years: string; projects: string; landArea: string; satisfaction: string };
   contact: { phone1: string; phone2: string; email: string; whatsapp: string; notificationEmail?: string };
-  services: Array<{ id: string; title: string; description: string; price?: string; icon?: string }>;
+  services: Array<{ id: string; title: string; description: string; price?: string; icon?: string; image?: string }>;
   testimonials: Array<{ id: string; name: string; text: string; rating?: number }>;
   menu: Array<{ id: string; label: string; to: string }>;
 }
@@ -99,7 +99,8 @@ const DEFAULT_CONTENT: ContentData = {
   hero: {
     title: "Оформим вашу недвижимость под ключ",
     subtitle: "Кадастровые работы любой сложности с гарантией результата. Вы получаете готовые документы - мы берём на себя всё остальное.",
-    ctaText: "Бесплатная консультация"
+    ctaText: "Бесплатная консультация",
+    backgroundImage: ""
   },
   stats: {
     years: "27+",
@@ -114,12 +115,12 @@ const DEFAULT_CONTENT: ContentData = {
     whatsapp: "79037438061"
   },
   services: [
-    { id: "1", title: "Технический план объекта", description: "Для постановки дома, бани, гаража на кадастровый учет", price: "от 8 000 ₽" },
-    { id: "2", title: "Межевой план", description: "Определение и закрепление границ земельного участка", price: "от 7 000 ₽" },
-    { id: "3", title: "Акт обследования", description: "Для снятия объекта с учета при сносе", price: "от 5 000 ₽" },
-    { id: "4", title: "Перевод в жилое", description: "Перевод нежилого дома в СНТ в жилой", price: "от 18 000 ₽" },
-    { id: "5", title: "Экспертиза объекта", description: "Строительная и землеустроительная экспертиза", price: "от 20 000 ₽" },
-    { id: "6", title: "Консультация", description: "Бесплатная консультация по земельно-имущественным вопросам", price: "Бесплатно" },
+    { id: "1", title: "Технический план объекта", description: "Для постановки дома, бани, гаража на кадастровый учет", price: "от 8 000 ₽", icon: "FileText", image: "" },
+    { id: "2", title: "Межевой план", description: "Определение и закрепление границ земельного участка", price: "от 7 000 ₽", icon: "MapPin", image: "" },
+    { id: "3", title: "Акт обследования", description: "Для снятия объекта с учета при сносе", price: "от 5 000 ₽", icon: "Ruler", image: "" },
+    { id: "4", title: "Перевод в жилое", description: "Перевод нежилого дома в СНТ в жилой", price: "от 18 000 ₽", icon: "Home", image: "" },
+    { id: "5", title: "Экспертиза объекта", description: "Строительная и землеустроительная экспертиза", price: "от 20 000 ₽", icon: "Scale", image: "" },
+    { id: "6", title: "Консультация", description: "Бесплатная консультация по земельно-имущественным вопросам", price: "Бесплатно", icon: "Award", image: "" },
   ],
   testimonials: [
     { id: "1", name: "Алексей П.", text: "Быстро оформили дом, никаких проблем с документами. Рекомендую!", rating: 5 },
