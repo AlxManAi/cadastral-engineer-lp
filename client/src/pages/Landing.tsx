@@ -29,8 +29,8 @@ interface ContentData {
 
 const DEFAULT_CONTENT: ContentData = {
   hero: {
-    title: "Дом без регистрации грозит штрафом или сносом",
-    subtitle: "Мы оформим все за вас под ключ - быстро, надежно, по закону.",
+    title: "Оформим вашу недвижимость под ключ",
+    subtitle: "Кадастровые работы любой сложности с гарантией результата. Вы получаете готовые документы - мы берём на себя всё остальное.",
     ctaText: "Бесплатная консультация"
   },
   stats: {
@@ -93,7 +93,7 @@ export default function Landing() {
       <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10">
         <div className="container mx-auto px-4 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 bg-gradient-to-br from-primary to-emerald-400 rounded-lg flex items-center justify-center text-white shadow-lg glow-primary">
+            <div className="w-11 h-11 bg-gradient-to-br from-primary to-blue-400 rounded-lg flex items-center justify-center text-white shadow-lg glow-primary">
               <MapPin size={24} />
             </div>
             <div>
@@ -193,7 +193,7 @@ export default function Landing() {
                 В 2024 году выявляют самострой. Торопитесь оформить!
               </div>
               
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6" data-testid="text-hero-title">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-tight mb-6" data-testid="text-hero-title">
                 {content.hero.title}
               </h1>
               
@@ -437,7 +437,7 @@ export default function Landing() {
                   transition={{ delay: i * 0.15 }}
                   className="text-center relative"
                 >
-                  <div className="w-20 h-20 bg-gradient-to-br from-primary to-emerald-400 rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-6 shadow-xl glow-primary">
+                  <div className="w-20 h-20 bg-gradient-to-br from-primary to-blue-400 rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-6 shadow-xl glow-primary">
                     {step.number}
                   </div>
                   <h3 className="text-xl font-bold text-white mb-4">{step.title}</h3>
@@ -509,7 +509,7 @@ export default function Landing() {
       <section className="py-16 relative overflow-hidden" data-testid="section-cta-banner">
         <div className="absolute inset-0 z-0">
           <img src={surveyorImage} alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-emerald-600/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-blue-600/90" />
         </div>
         <div className="container mx-auto px-4 relative z-10 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Не откладывайте важные вопросы на потом</h2>
@@ -591,7 +591,7 @@ export default function Landing() {
             </div>
 
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-emerald-500/20 rounded-3xl blur-xl"></div>
+              <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-blue-500/20 rounded-3xl blur-xl"></div>
               <div className="relative glass p-8 rounded-2xl border border-white/10">
                 <ContactForm />
               </div>
@@ -606,7 +606,7 @@ export default function Landing() {
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-primary to-emerald-400 rounded-lg flex items-center justify-center text-white">
+                <div className="w-10 h-10 bg-gradient-to-br from-primary to-blue-400 rounded-lg flex items-center justify-center text-white">
                   <MapPin size={20} />
                 </div>
                 <div>
