@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useCreateInquiry } from "@/hooks/use-content";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Send } from "lucide-react";
+import { Loader2, CheckCircle, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const formSchema = z.object({
@@ -50,42 +50,49 @@ export function ContactForm() {
   }
 
   return (
-    <div className="bg-white p-8 rounded-2xl shadow-xl border border-primary/10">
-      <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold text-gray-900">Бесплатная консультация</h3>
-        <p className="text-muted-foreground mt-2">Оставьте номер, и мы перезвоним в течение 15 минут</p>
+    <div>
+      <div className="text-center mb-8">
+        <h3 className="text-2xl font-bold text-white" data-testid="text-form-title">Бесплатная консультация</h3>
+        <p className="text-muted-foreground mt-2">Перезвоним в течение 5 минут</p>
       </div>
 
       {isSuccess ? (
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-green-50 p-6 rounded-xl text-center border border-green-200"
+          className="bg-primary/20 p-8 rounded-xl text-center border border-primary/30"
+          data-testid="form-success"
         >
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Send className="w-8 h-8 text-green-600" />
+          <div className="w-20 h-20 bg-primary/30 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="w-10 h-10 text-primary" />
           </div>
-          <h4 className="text-xl font-bold text-green-800 mb-2">Спасибо!</h4>
-          <p className="text-green-700">Ваша заявка принята. Ожидайте звонка.</p>
+          <h4 className="text-2xl font-bold text-white mb-2">Спасибо за заявку!</h4>
+          <p className="text-gray-300 mb-6">Наш специалист свяжется с вами в ближайшее время.</p>
           <Button 
             variant="outline" 
-            className="mt-6 border-green-600 text-green-700 hover:bg-green-100"
+            className="border-primary/50 text-primary hover:bg-primary/10"
             onClick={() => setIsSuccess(false)}
+            data-testid="button-new-form"
           >
-            Отправить еще одну
+            Отправить еще одну заявку
           </Button>
         </motion.div>
       ) : (
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" data-testid="form-contact">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700">Ваше имя</FormLabel>
+                  <FormLabel className="text-gray-300">Ваше имя</FormLabel>
                   <FormControl>
-                    <Input placeholder="Иван Иванов" {...field} className="h-12 bg-gray-50 border-gray-200 focus:ring-primary/20" />
+                    <Input 
+                      placeholder="Иван Иванов" 
+                      {...field} 
+                      className="h-14 bg-background/50 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20" 
+                      data-testid="input-name"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -96,9 +103,14 @@ export function ContactForm() {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700">Номер телефона</FormLabel>
+                  <FormLabel className="text-gray-300">Номер телефона</FormLabel>
                   <FormControl>
-                    <Input placeholder="+7 (999) 000-00-00" {...field} className="h-12 bg-gray-50 border-gray-200 focus:ring-primary/20" />
+                    <Input 
+                      placeholder="+7 (999) 000-00-00" 
+                      {...field} 
+                      className="h-14 bg-background/50 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20" 
+                      data-testid="input-phone"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -106,8 +118,10 @@ export function ContactForm() {
             />
             <Button 
               type="submit" 
-              className="w-full h-12 text-lg font-semibold bg-accent hover:bg-accent/90 shadow-lg shadow-accent/25"
+              size="lg"
+              className="w-full h-14 text-lg font-semibold bg-primary hover:bg-primary/90 shadow-xl glow-primary"
               disabled={isPending}
+              data-testid="button-submit"
             >
               {isPending ? (
                 <>
@@ -115,10 +129,13 @@ export function ContactForm() {
                   Отправка...
                 </>
               ) : (
-                "Получить консультацию"
+                <>
+                  Получить консультацию
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </>
               )}
             </Button>
-            <p className="text-xs text-center text-muted-foreground mt-4">
+            <p className="text-xs text-center text-muted-foreground">
               Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных
             </p>
           </form>

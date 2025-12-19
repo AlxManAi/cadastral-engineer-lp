@@ -1,69 +1,70 @@
-import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link as ScrollLink } from "react-scroll";
-import { Link } from "wouter";
 import { 
   MapPin, Phone, Mail, ChevronRight, CheckCircle, 
   Ruler, FileText, Home, Shield, Award, Users,
-  Menu, X
+  Menu, Star, Clock, Target, Zap, Building, ArrowRight
 } from "lucide-react";
+import { SiWhatsapp } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { 
   Sheet, SheetContent, SheetTrigger 
 } from "@/components/ui/sheet";
 import { useContent } from "@/hooks/use-content";
-import { SectionHeading } from "@/components/SectionHeading";
 import { ContactForm } from "@/components/ContactForm";
-import { Skeleton } from "@/components/ui/skeleton";
 
-// --- Types for Frontend Consumption ---
-// (Normally these would be inferred or shared, but for display logic we define shape here)
+import heroImage from "@assets/stock_images/land_surveyor_with_t_5b3b0229.jpg";
+import surveyorImage from "@assets/stock_images/land_surveyor_with_t_59d2feeb.jpg";
+import aerialImage from "@assets/stock_images/aerial_view_city_urb_00bb8fa2.jpg";
+import documentsImage from "@assets/stock_images/house_real_estate_pr_6dcb4331.jpg";
+import constructionImage from "@assets/stock_images/construction_site_me_609c5c58.jpg";
+
 interface ContentData {
   hero: { title: string; subtitle: string; ctaText: string };
   stats: { years: string; projects: string; landArea: string; satisfaction: string };
-  contacts: { phone1: string; phone2: string; email: string; whatsapp: string };
+  contact: { phone1: string; phone2: string; email: string; whatsapp: string };
   services: Array<{ id: string; title: string; description: string; price?: string }>;
   testimonials: Array<{ id: string; name: string; text: string; rating?: number }>;
 }
 
-// --- Default Data for Fallback ---
 const DEFAULT_CONTENT: ContentData = {
   hero: {
-    title: "Кадастровые работы любой сложности",
-    subtitle: "Профессиональное оформление недвижимости, межевание и геодезия с гарантией результата.",
+    title: "Дом без регистрации грозит штрафом или сносом",
+    subtitle: "Мы оформим все за вас под ключ - быстро, надежно, по закону.",
     ctaText: "Бесплатная консультация"
   },
   stats: {
-    years: "12",
-    projects: "3000+",
-    landArea: "5000+",
-    satisfaction: "99%"
+    years: "27+",
+    projects: "30,000+",
+    landArea: "30,000+",
+    satisfaction: "98%"
   },
-  contacts: {
-    phone1: "+7 (999) 123-45-67",
-    phone2: "+7 (999) 765-43-21",
-    email: "info@kadastr.ru",
-    whatsapp: "https://wa.me/79991234567"
+  contact: {
+    phone1: "+7 903 743-80-61",
+    phone2: "+7 906 770-06-97",
+    email: "9037438061@mail.ru",
+    whatsapp: "79037438061"
   },
   services: [
-    { id: "1", title: "Межевание земельных участков", description: "Уточнение границ, раздел, объединение участков.", price: "от 5 000 ₽" },
-    { id: "2", title: "Технический план", description: "Для постановки дома, бани или гаража на кадастровый учет.", price: "от 6 000 ₽" },
-    { id: "3", title: "Акт обследования", description: "Для снятия объекта недвижимости с учета при сносе.", price: "от 3 000 ₽" },
-    { id: "4", title: "Вынос границ в натуру", description: "Определение точных границ участка на местности колышками.", price: "от 1 000 ₽/точка" },
-    { id: "5", title: "Топографическая съемка", description: "Для газификации, разрешения на строительство и проектирования.", price: "от 8 000 ₽" },
-    { id: "6", title: "Юридическое сопровождение", description: "Помощь в оформлении прав собственности и решении споров.", price: "Индивидуально" },
+    { id: "1", title: "Технический план объекта", description: "Для постановки дома, бани, гаража на кадастровый учет", price: "от 8 000 ₽" },
+    { id: "2", title: "Межевой план", description: "Определение и закрепление границ земельного участка", price: "от 7 000 ₽" },
+    { id: "3", title: "Акт обследования", description: "Для снятия объекта с учета при сносе", price: "от 5 000 ₽" },
+    { id: "4", title: "Перевод в жилое", description: "Перевод нежилого дома в СНТ в жилой", price: "от 18 000 ₽" },
+    { id: "5", title: "Экспертиза объекта", description: "Строительная и землеустроительная экспертиза", price: "от 20 000 ₽" },
+    { id: "6", title: "Консультация", description: "Бесплатная консультация по земельно-имущественным вопросам", price: "Бесплатно" },
   ],
   testimonials: [
-    { id: "1", name: "Алексей Смирнов", text: "Отличная работа! Сделали межевание за 3 дня. Очень грамотные специалисты, все объяснили и показали.", rating: 5 },
-    { id: "2", name: "Елена Петрова", text: "Обращалась за техпланом на дом. Документы подготовили быстро, в МФЦ приняли без вопросов. Рекомендую!", rating: 5 },
-    { id: "3", name: "ООО 'СтройИнвест'", text: "Сотрудничаем уже 2 года по всем нашим объектам. Надежный партнер, всегда соблюдают сроки.", rating: 5 },
+    { id: "1", name: "Алексей П.", text: "Быстро оформили дом, никаких проблем с документами. Рекомендую!", rating: 5 },
+    { id: "2", name: "Марина С.", text: "Помогли с межеванием сложного участка. Спасибо за профессионализм!", rating: 5 },
+    { id: "3", name: "Игорь В.", text: "Все четко, в срок и по адекватной цене. Работают на результат.", rating: 5 },
   ]
 };
+
+const serviceIcons = [FileText, MapPin, Building, Home, Target, Users];
 
 export default function Landing() {
   const { data: serverData, isLoading } = useContent();
   
-  // Merge server data with defaults to ensure we always have content
   const content: ContentData = {
     ...DEFAULT_CONTENT,
     ...(serverData || {})
@@ -74,7 +75,7 @@ export default function Landing() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Загрузка сайта...</p>
+          <p className="text-muted-foreground">Загрузка...</p>
         </div>
       </div>
     );
@@ -84,69 +85,78 @@ export default function Landing() {
     <div className="min-h-screen bg-background font-sans overflow-x-hidden">
       
       {/* --- HEADER --- */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+      <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10">
         <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 bg-gradient-to-br from-primary to-emerald-400 rounded-lg flex items-center justify-center text-white shadow-lg glow-primary">
               <MapPin size={24} />
             </div>
             <div>
-              <h1 className="font-bold text-xl leading-none text-primary">ГеоВектор</h1>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">Кадастровые работы</p>
+              <h1 className="font-bold text-xl leading-none text-white" data-testid="text-logo">Кадастр-Онлайн</h1>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">Кадастровый инженер</p>
             </div>
           </div>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8 font-medium text-gray-600">
-            {['О нас', 'Услуги', 'Этапы', 'Отзывы', 'Контакты'].map((item) => (
+          <nav className="hidden lg:flex items-center gap-8 font-medium text-gray-300">
+            {[
+              { label: 'Услуги', to: 'services' },
+              { label: 'Почему мы', to: 'why-us' },
+              { label: 'Как работаем', to: 'process' },
+              { label: 'Отзывы', to: 'testimonials' },
+              { label: 'Контакты', to: 'contact' }
+            ].map((item) => (
               <ScrollLink 
-                key={item}
-                to={item === 'О нас' ? 'about' : item === 'Услуги' ? 'services' : item === 'Этапы' ? 'process' : item === 'Отзывы' ? 'testimonials' : 'contact'}
+                key={item.to}
+                to={item.to}
                 smooth={true}
                 offset={-100}
                 className="cursor-pointer hover:text-primary transition-colors"
+                data-testid={`link-nav-${item.to}`}
               >
-                {item}
+                {item.label}
               </ScrollLink>
             ))}
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
-            <a href={`tel:${content.contacts.phone1}`} className="text-right">
-              <div className="font-bold text-gray-900">{content.contacts.phone1}</div>
-              <div className="text-xs text-accent">Заказать звонок</div>
+            <a href={`tel:${content.contact.phone1.replace(/\s/g, '')}`} className="text-right group" data-testid="link-phone">
+              <div className="font-bold text-white group-hover:text-primary transition-colors">{content.contact.phone1}</div>
+              <div className="text-xs text-primary">Звоните сейчас</div>
             </a>
-            <Button className="bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 rounded-full px-6">
-              <ScrollLink to="contact" smooth={true} offset={-100}>Оставить заявку</ScrollLink>
-            </Button>
+            <ScrollLink to="contact" smooth={true} offset={-100}>
+              <Button className="bg-primary hover:bg-primary/90 text-white shadow-lg glow-primary rounded-lg px-6" data-testid="button-header-cta">
+                Оставить заявку
+              </Button>
+            </ScrollLink>
           </div>
 
-          {/* Mobile Menu */}
           <Sheet>
-            <SheetTrigger className="md:hidden p-2">
-              <Menu className="w-6 h-6 text-gray-700" />
+            <SheetTrigger className="lg:hidden p-2" data-testid="button-mobile-menu">
+              <Menu className="w-6 h-6 text-white" />
             </SheetTrigger>
-            <SheetContent>
+            <SheetContent className="bg-card border-white/10">
               <nav className="flex flex-col gap-6 mt-10 text-lg font-medium">
-                {['О нас', 'Услуги', 'Этапы', 'Отзывы', 'Контакты'].map((item) => (
+                {['Услуги', 'Почему мы', 'Как работаем', 'Отзывы', 'Контакты'].map((item, i) => (
                   <ScrollLink 
-                    key={item}
-                    to={item === 'О нас' ? 'about' : item === 'Услуги' ? 'services' : item === 'Этапы' ? 'process' : item === 'Отзывы' ? 'testimonials' : 'contact'}
+                    key={i}
+                    to={item === 'Услуги' ? 'services' : item === 'Почему мы' ? 'why-us' : item === 'Как работаем' ? 'process' : item === 'Отзывы' ? 'testimonials' : 'contact'}
                     smooth={true}
                     offset={-100}
-                    className="cursor-pointer text-gray-700 hover:text-primary"
+                    className="cursor-pointer text-foreground hover:text-primary"
                   >
                     {item}
                   </ScrollLink>
                 ))}
-                <div className="mt-8 border-t pt-8">
-                  <a href={`tel:${content.contacts.phone1}`} className="flex items-center gap-3 mb-4 text-gray-900 font-bold">
-                    <Phone className="w-5 h-5 text-accent" />
-                    {content.contacts.phone1}
+                <div className="mt-8 border-t border-white/10 pt-8">
+                  <a href={`tel:${content.contact.phone1}`} className="flex items-center gap-3 mb-4 text-white font-bold">
+                    <Phone className="w-5 h-5 text-primary" />
+                    {content.contact.phone1}
                   </a>
-                  <Button className="w-full bg-primary hover:bg-primary/90 text-white">
-                    Оставить заявку
-                  </Button>
+                  <ScrollLink to="contact" smooth={true} offset={-100}>
+                    <Button className="w-full bg-primary hover:bg-primary/90 text-white">
+                      Оставить заявку
+                    </Button>
+                  </ScrollLink>
                 </div>
               </nav>
             </SheetContent>
@@ -155,88 +165,80 @@ export default function Landing() {
       </header>
 
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        {/* Abstract Background */}
+      <section className="relative min-h-screen flex items-center pt-20" data-testid="section-hero">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-50 to-gray-100" />
-          {/* Subtle grid pattern */}
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/graphy.png')] opacity-30" />
-          {/* Decorative shapes */}
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-50/50 -skew-x-12 translate-x-20" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
+          <img 
+            src={heroImage} 
+            alt="Кадастровые работы" 
+            className="w-full h-full object-cover"
+          />
+          <div className="hero-overlay absolute inset-0" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
         </div>
 
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="container mx-auto px-4 relative z-10 py-20">
+          <div className="max-w-3xl">
             <motion.div 
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent font-medium text-sm mb-6">
-                <CheckCircle className="w-4 h-4" />
-                Лицензированные кадастровые инженеры
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-primary font-semibold text-sm mb-8">
+                <Zap className="w-4 h-4" />
+                В 2024 году выявляют самострой. Торопитесь оформить!
               </div>
-              <h1 className="text-4xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6">
+              
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6" data-testid="text-hero-title">
                 {content.hero.title}
               </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-lg leading-relaxed">
+              
+              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl leading-relaxed" data-testid="text-hero-subtitle">
                 {content.hero.subtitle}
               </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 shadow-xl shadow-primary/25">
-                  <ScrollLink to="contact" smooth={true} offset={-100}>{content.hero.ctaText}</ScrollLink>
-                </Button>
-                <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-full border-2 border-gray-200 hover:bg-gray-50 text-gray-700">
-                  <ScrollLink to="services" smooth={true} offset={-100}>Наши услуги</ScrollLink>
-                </Button>
+
+              <div className="flex flex-wrap gap-4 mb-12">
+                <ScrollLink to="contact" smooth={true} offset={-100}>
+                  <Button size="lg" className="h-14 px-8 text-lg bg-primary hover:bg-primary/90 text-white shadow-xl glow-primary" data-testid="button-hero-cta">
+                    {content.hero.ctaText}
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </ScrollLink>
+                <a href={`https://wa.me/${content.contact.whatsapp}`} target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-white/20 text-white hover:bg-white/10" data-testid="button-whatsapp">
+                    <SiWhatsapp className="w-5 h-5 mr-2 text-green-400" />
+                    WhatsApp
+                  </Button>
+                </a>
               </div>
 
-              {/* Trust indicators */}
-              <div className="mt-12 flex items-center gap-8 text-gray-500">
+              <div className="flex flex-wrap gap-6 text-gray-400">
                 <div className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-accent" />
-                  <span className="text-sm font-medium">Гарантия по договору</span>
+                  <CheckCircle className="w-5 h-5 text-primary" />
+                  <span>Выездной офис</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Award className="w-5 h-5 text-accent" />
-                  <span className="text-sm font-medium">Аттестат СРО</span>
+                  <CheckCircle className="w-5 h-5 text-primary" />
+                  <span>Работаем в выходные</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-primary" />
+                  <span>Договор на результат</span>
                 </div>
               </div>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative hidden lg:block"
-            >
-              {/* Image Container with decoration */}
-              <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-4 border-white transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                {/* Use Unsplash image for Surveyor context */}
-                {/* surveyor land measuring equipment outdoors */}
-                <img 
-                  src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2070&auto=format&fit=crop" 
-                  alt="Кадастровые работы" 
-                  className="w-full h-auto object-cover"
-                />
-              </div>
-              <div className="absolute inset-0 border-2 border-accent/30 rounded-3xl transform -rotate-2 scale-105 z-0" />
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* --- STATS SECTION --- */}
-      <section className="py-12 bg-primary text-white">
+      <section className="py-16 bg-card border-y border-white/5" data-testid="section-stats">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { label: "Лет опыта", value: content.stats.years },
-              { label: "Проектов", value: content.stats.projects },
-              { label: "Га земли", value: content.stats.landArea },
-              { label: "Довольных клиентов", value: content.stats.satisfaction }
+              { label: "Лет опыта", value: content.stats.years, icon: Clock },
+              { label: "Оказанных услуг", value: content.stats.projects, icon: FileText },
+              { label: "Межеваний", value: content.stats.landArea, icon: MapPin },
+              { label: "Довольных клиентов", value: content.stats.satisfaction, icon: Users }
             ].map((stat, i) => (
               <motion.div 
                 key={i}
@@ -244,37 +246,105 @@ export default function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="p-4"
+                className="text-center p-6"
+                data-testid={`stat-${i}`}
               >
-                <div className="text-4xl md:text-5xl font-bold mb-2 text-accent">{stat.value}</div>
-                <div className="text-primary-foreground/80 font-medium">{stat.label}</div>
+                <stat.icon className="w-8 h-8 text-primary mx-auto mb-4" />
+                <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">{stat.value}</div>
+                <div className="text-muted-foreground font-medium">{stat.label}</div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* --- ABOUT / FEATURES SECTION --- */}
-      <section id="about" className="py-20 lg:py-32 bg-background">
-        <div className="container mx-auto px-4">
-          <SectionHeading title="Почему выбирают нас" subtitle="Мы ценим ваше время и гарантируем юридическую чистоту всех документов." />
+      {/* --- PROBLEMS SECTION --- */}
+      <section className="py-20 lg:py-28 relative overflow-hidden" data-testid="section-problems">
+        <div className="absolute inset-0 z-0">
+          <img src={aerialImage} alt="" className="w-full h-full object-cover opacity-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Вам знакомы эти проблемы?</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Большинство заказчиков сталкиваются с этими сложностями</p>
+          </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { icon: Ruler, title: "Точность измерений", text: "Используем современное GPS/GLONASS оборудование для максимальной точности границ." },
-              { icon: FileText, title: "Работа под ключ", text: "Сами запрашиваем сведения, проводим замеры и подаем документы в Росреестр." },
-              { icon: Shield, title: "Гарантия качества", text: "Исправление ошибок за наш счет. Сопровождаем до получения выписки ЕГРН." }
-            ].map((feature, i) => (
-              <motion.div 
+              { 
+                title: "Отсутствие договора на результат", 
+                text: "Обычно заключают договор на разработку плана, а посещение кадастровой палаты остается вашей проблемой. Мы заключаем договор на результат - получение кадастрового паспорта."
+              },
+              { 
+                title: "Отсутствие оптимального решения", 
+                text: "Не зная всех механизмов, инженер не может определить оптимальный путь. Бездумная работа приводит к проблемам на следующих этапах. У нас работают сертифицированные инженеры."
+              },
+              { 
+                title: "Незнание законодательства", 
+                text: "Работа по привычному пути приводит к неактуальным этапам работ, что увеличивает бюджет и сроки. Мы следим за изменениями и используем актуальные методы."
+              }
+            ].map((problem, i) => (
+              <motion.div
                 key={i}
-                whileHover={{ y: -5 }}
-                className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:border-primary/20 transition-all"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="glass p-8 rounded-2xl border border-white/10"
               >
-                <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 text-primary">
-                  <feature.icon className="w-7 h-7" />
+                <div className="w-12 h-12 bg-destructive/20 rounded-xl flex items-center justify-center mb-6">
+                  <span className="text-destructive text-2xl font-bold">{i + 1}</span>
                 </div>
-                <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{feature.text}</p>
+                <h3 className="text-xl font-bold text-white mb-4">{problem.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{problem.text}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- WHY US SECTION --- */}
+      <section id="why-us" className="py-20 lg:py-28 bg-card" data-testid="section-why-us">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Почему нам доверяют</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Мы работаем на результат и ценим ваше время</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: Users, title: "Консультации бесплатно", text: "Поможем разобраться в вашей ситуации" },
+              { icon: Target, title: "Работаем на результат", text: "Договор до получения документов" },
+              { icon: Award, title: "Кадастровые инженеры с аттестатом", text: "Члены СРО с подтвержденной квалификацией" },
+              { icon: Zap, title: "Геодезия без посредников", text: "Собственное оборудование и специалисты" },
+              { icon: Clock, title: "Реальные сроки работ", text: "Называем точные сроки и соблюдаем их" },
+              { icon: Shield, title: "Помощь в сложных задачах", text: "Решаем нестандартные ситуации" },
+              { icon: FileText, title: "Высокая квалификация", text: "Постоянное обучение и развитие" },
+              { icon: CheckCircle, title: "Большой опыт работы", text: "27+ лет в кадастровой сфере" }
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="p-6 rounded-xl bg-background/50 border border-white/5 hover:border-primary/30 transition-colors"
+              >
+                <item.icon className="w-8 h-8 text-primary mb-4" />
+                <h3 className="font-bold text-white mb-2">{item.title}</h3>
+                <p className="text-sm text-muted-foreground">{item.text}</p>
               </motion.div>
             ))}
           </div>
@@ -282,32 +352,147 @@ export default function Landing() {
       </section>
 
       {/* --- SERVICES SECTION --- */}
-      <section id="services" className="py-20 lg:py-32 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <SectionHeading title="Наши услуги" subtitle="Полный спектр кадастровых и геодезических работ для частных лиц и бизнеса." />
+      <section id="services" className="py-20 lg:py-28 relative" data-testid="section-services">
+        <div className="absolute inset-0 z-0">
+          <img src={documentsImage} alt="" className="w-full h-full object-cover opacity-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/98 to-background" />
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Наши услуги</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Полный спектр кадастровых и геодезических работ</p>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {content.services.map((service, i) => (
-              <motion.div
-                key={service.id}
+            {content.services.map((service, i) => {
+              const Icon = serviceIcons[i % serviceIcons.length];
+              return (
+                <motion.div
+                  key={service.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  className="glass p-8 rounded-2xl border border-white/10 hover:border-primary/30 transition-all group"
+                  data-testid={`card-service-${service.id}`}
+                >
+                  <div className="w-14 h-14 bg-primary/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/30 transition-colors">
+                    <Icon className="w-7 h-7 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3">{service.title}</h3>
+                  <p className="text-muted-foreground mb-6 leading-relaxed">{service.description}</p>
+                  <div className="flex items-center justify-between pt-6 border-t border-white/10">
+                    <span className="font-bold text-2xl gradient-text">{service.price}</span>
+                    <ScrollLink to="contact" smooth={true} offset={-100}>
+                      <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80 hover:bg-primary/10">
+                        Заказать <ChevronRight className="w-4 h-4 ml-1" />
+                      </Button>
+                    </ScrollLink>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* --- PROCESS SECTION --- */}
+      <section id="process" className="py-20 lg:py-28 bg-card" data-testid="section-process">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Как мы работаем</h2>
+            <p className="text-xl text-muted-foreground">Простой и понятный процесс от заявки до результата</p>
+          </motion.div>
+          
+          <div className="relative">
+            <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-primary/30 to-transparent -translate-y-1/2"></div>
+            
+            <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+              {[
+                { number: "01", title: "Оставляете заявку", text: "Звоните или заполняете форму. Мы бесплатно консультируем и анализируем вашу ситуацию." },
+                { number: "02", title: "Выезд и замеры", text: "Приезжаем на объект, проводим геодезические измерения, собираем необходимые данные." },
+                { number: "03", title: "Готовые документы", text: "Подготавливаем план, подаем в Росреестр, вы получаете выписку ЕГРН." }
+              ].map((step, i) => (
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.15 }}
+                  className="text-center relative"
+                >
+                  <div className="w-20 h-20 bg-gradient-to-br from-primary to-emerald-400 rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-6 shadow-xl glow-primary">
+                    {step.number}
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-4">{step.title}</h3>
+                  <p className="text-muted-foreground max-w-xs mx-auto">{step.text}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mt-16"
+          >
+            <ScrollLink to="contact" smooth={true} offset={-100}>
+              <Button size="lg" className="h-14 px-10 text-lg bg-primary hover:bg-primary/90 shadow-xl glow-primary" data-testid="button-process-cta">
+                Начать сейчас
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </ScrollLink>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* --- TESTIMONIALS SECTION --- */}
+      <section id="testimonials" className="py-20 lg:py-28" data-testid="section-testimonials">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Отзывы наших клиентов</h2>
+            <p className="text-xl text-muted-foreground">Нам доверяют более 30 000 собственников недвижимости</p>
+          </motion.div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {content.testimonials.map((review, i) => (
+              <motion.div 
+                key={review.id}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full border border-gray-100"
+                transition={{ delay: i * 0.1 }}
+                className="glass p-8 rounded-2xl border border-white/10"
+                data-testid={`card-testimonial-${review.id}`}
               >
-                <div className="mb-4">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{service.title}</h3>
-                  <div className="w-12 h-1 bg-accent rounded-full mb-4"></div>
-                  <p className="text-muted-foreground flex-grow mb-6">{service.description}</p>
+                <div className="flex gap-1 mb-6">
+                  {[...Array(review.rating || 5)].map((_, j) => (
+                    <Star key={j} className="w-5 h-5 fill-amber-400 text-amber-400" />
+                  ))}
                 </div>
-                <div className="mt-auto flex items-center justify-between pt-6 border-t border-gray-100">
-                  <span className="font-bold text-primary text-lg">{service.price}</span>
-                  <ScrollLink to="contact" smooth={true} offset={-100}>
-                    <Button variant="ghost" size="sm" className="text-accent hover:text-accent/80 hover:bg-accent/10 px-0">
-                      Заказать <ChevronRight className="w-4 h-4 ml-1" />
-                    </Button>
-                  </ScrollLink>
+                <p className="text-gray-300 mb-6 leading-relaxed text-lg">"{review.text}"</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold text-lg">
+                    {review.name.charAt(0)}
+                  </div>
+                  <div className="font-bold text-white">{review.name}</div>
                 </div>
               </motion.div>
             ))}
@@ -315,158 +500,142 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* --- PROCESS SECTION --- */}
-      <section id="process" className="py-20 bg-background overflow-hidden">
-        <div className="container mx-auto px-4">
-          <SectionHeading title="Как мы работаем" centered />
-          
-          <div className="relative mt-16">
-            {/* Connecting line */}
-            <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gray-200 -translate-y-1/2 z-0"></div>
-            
-            <div className="grid md:grid-cols-3 gap-8 relative z-10">
-              {[
-                { number: "01", title: "Заявка и договор", text: "Оставляете заявку, мы анализируем документы и заключаем договор." },
-                { number: "02", title: "Выезд и замеры", text: "Геодезисты выезжают на объект и проводят необходимые измерения." },
-                { number: "03", title: "Результат", text: "Готовим межевой или технический план и передаем вам готовые документы." }
-              ].map((step, i) => (
-                <div key={i} className="text-center bg-background md:bg-transparent p-4">
-                  <div className="w-16 h-16 bg-white border-4 border-accent rounded-full flex items-center justify-center text-2xl font-bold text-gray-900 mx-auto mb-6 shadow-lg">
-                    {step.number}
-                  </div>
-                  <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-                  <p className="text-muted-foreground">{step.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+      {/* --- CTA BANNER --- */}
+      <section className="py-16 relative overflow-hidden" data-testid="section-cta-banner">
+        <div className="absolute inset-0 z-0">
+          <img src={surveyorImage} alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-emerald-600/90" />
         </div>
-      </section>
-
-      {/* --- TESTIMONIALS SECTION --- */}
-      <section id="testimonials" className="py-20 bg-primary/5">
-        <div className="container mx-auto px-4">
-          <SectionHeading title="Отзывы клиентов" subtitle="Нам доверяют более 3000 собственников недвижимости." />
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {content.testimonials.map((review) => (
-              <div key={review.id} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-                <div className="flex text-yellow-400 mb-4">
-                  {[...Array(review.rating || 5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                  ))}
-                </div>
-                <p className="text-gray-600 mb-6 italic">"{review.text}"</p>
-                <div className="font-bold text-gray-900">{review.name}</div>
-              </div>
-            ))}
+        <div className="container mx-auto px-4 relative z-10 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Не откладывайте важные вопросы на потом</h2>
+          <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">Задайте свои вопросы прямо сейчас - это совершенно бесплатно</p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a href={`tel:${content.contact.phone1.replace(/\s/g, '')}`}>
+              <Button size="lg" variant="secondary" className="h-14 px-8 text-lg bg-white text-primary hover:bg-white/90" data-testid="button-cta-call">
+                <Phone className="w-5 h-5 mr-2" />
+                {content.contact.phone1}
+              </Button>
+            </a>
+            <a href={`https://wa.me/${content.contact.whatsapp}`} target="_blank" rel="noopener noreferrer">
+              <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-white/30 text-white hover:bg-white/10" data-testid="button-cta-whatsapp">
+                <SiWhatsapp className="w-5 h-5 mr-2" />
+                WhatsApp
+              </Button>
+            </a>
           </div>
         </div>
       </section>
 
       {/* --- CONTACT SECTION --- */}
-      <section id="contact" className="py-20 lg:py-32 bg-white">
+      <section id="contact" className="py-20 lg:py-28 bg-card" data-testid="section-contact">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div>
-              <SectionHeading title="Контакты" subtitle="Свяжитесь с нами любым удобным способом." centered={false} />
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Оставьте заявку</h2>
+                <p className="text-xl text-muted-foreground mb-8">Просто укажите имя и номер телефона. Перезвоним в течение 5 минут и расскажем все подробно.</p>
+              </motion.div>
               
-              <div className="space-y-8 mt-8">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 text-primary">
+              <div className="space-y-6">
+                <div className="flex items-center gap-4 p-4 glass rounded-xl">
+                  <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary">
                     <Phone className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg mb-1">Телефоны</h4>
-                    <a href={`tel:${content.contacts.phone1}`} className="block text-gray-600 hover:text-primary transition-colors">{content.contacts.phone1}</a>
-                    <a href={`tel:${content.contacts.phone2}`} className="block text-gray-600 hover:text-primary transition-colors">{content.contacts.phone2}</a>
+                    <div className="text-sm text-muted-foreground mb-1">Телефоны</div>
+                    <a href={`tel:${content.contact.phone1.replace(/\s/g, '')}`} className="block text-white font-medium hover:text-primary transition-colors">{content.contact.phone1}</a>
+                    <a href={`tel:${content.contact.phone2.replace(/\s/g, '')}`} className="block text-white font-medium hover:text-primary transition-colors">{content.contact.phone2}</a>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 text-primary">
+                <div className="flex items-center gap-4 p-4 glass rounded-xl">
+                  <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary">
                     <Mail className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg mb-1">Email</h4>
-                    <a href={`mailto:${content.contacts.email}`} className="text-gray-600 hover:text-primary transition-colors">{content.contacts.email}</a>
+                    <div className="text-sm text-muted-foreground mb-1">Email</div>
+                    <a href={`mailto:${content.contact.email}`} className="text-white font-medium hover:text-primary transition-colors">{content.contact.email}</a>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 text-primary">
+                <div className="flex items-center gap-4 p-4 glass rounded-xl">
+                  <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center text-green-400">
+                    <SiWhatsapp className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground mb-1">WhatsApp</div>
+                    <a href={`https://wa.me/${content.contact.whatsapp}`} target="_blank" rel="noopener noreferrer" className="text-white font-medium hover:text-green-400 transition-colors">Написать в мессенджер</a>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 p-4 glass rounded-xl">
+                  <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary">
                     <MapPin className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg mb-1">Офис</h4>
-                    <p className="text-gray-600">г. Москва, ул. Примерная, д. 10, оф. 205<br/>Пн-Пт: 09:00 - 18:00</p>
+                    <div className="text-sm text-muted-foreground mb-1">Офис</div>
+                    <div className="text-white font-medium">Московская область, Подольск</div>
+                    <div className="text-muted-foreground text-sm">Советская площадь, дом 3, офис 37</div>
                   </div>
-                </div>
-
-                <div className="pt-8">
-                   <Button variant="outline" className="gap-2 w-full md:w-auto" asChild>
-                     <a href={content.contacts.whatsapp} target="_blank" rel="noopener noreferrer">
-                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                       Написать в WhatsApp
-                     </a>
-                   </Button>
                 </div>
               </div>
             </div>
 
             <div className="relative">
-               <div className="absolute -inset-4 bg-gradient-to-tr from-primary/10 to-accent/10 rounded-[2rem] blur-xl"></div>
-               <div className="relative">
-                 <ContactForm />
-               </div>
+              <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-emerald-500/20 rounded-3xl blur-xl"></div>
+              <div className="relative glass p-8 rounded-2xl border border-white/10">
+                <ContactForm />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* --- FOOTER --- */}
-      <footer className="bg-gray-900 text-gray-300 py-12">
+      <footer className="py-12 border-t border-white/5" data-testid="section-footer">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div className="col-span-2">
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                <MapPin className="text-accent" />
-                ГеоВектор
-              </h2>
-              <p className="max-w-sm text-gray-400">
-                Профессиональные кадастровые работы. Межевание, технические планы, геодезия. Работаем по всей области.
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-br from-primary to-emerald-400 rounded-lg flex items-center justify-center text-white">
+                  <MapPin size={20} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white">Кадастр-Онлайн</h3>
+                  <p className="text-xs text-muted-foreground">Кадастровый инженер</p>
+                </div>
+              </div>
+              <p className="text-muted-foreground text-sm max-w-xs">
+                Профессиональные кадастровые услуги. Технические планы, межевание, экспертиза. Работаем по всей Московской области.
               </p>
             </div>
+            
             <div>
-              <h3 className="text-white font-bold mb-4">Навигация</h3>
-              <ul className="space-y-2">
-                {['О нас', 'Услуги', 'Этапы', 'Контакты'].map((item) => (
-                  <li key={item}>
-                    <ScrollLink 
-                      to={item === 'О нас' ? 'about' : item === 'Услуги' ? 'services' : item === 'Этапы' ? 'process' : 'contact'} 
-                      smooth={true} 
-                      className="cursor-pointer hover:text-accent transition-colors"
-                    >
-                      {item}
-                    </ScrollLink>
-                  </li>
-                ))}
+              <h4 className="font-bold text-white mb-4">Услуги</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>Технический план</li>
+                <li>Межевой план</li>
+                <li>Акт обследования</li>
+                <li>Экспертиза</li>
               </ul>
             </div>
+
             <div>
-              <h3 className="text-white font-bold mb-4">Контакты</h3>
-              <ul className="space-y-2 text-sm">
-                <li>{content.contacts.phone1}</li>
-                <li>{content.contacts.email}</li>
-                <li className="pt-2">
-                  <Link href="/admin" className="text-gray-600 hover:text-gray-400 text-xs">Вход для сотрудников</Link>
-                </li>
-              </ul>
+              <h4 className="font-bold text-white mb-4">Контакты</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <div>{content.contact.phone1}</div>
+                <div>{content.contact.phone2}</div>
+                <div>{content.contact.email}</div>
+              </div>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-            <p>© {new Date().getFullYear()} ГеоВектор. Все права защищены.</p>
-            <p>Политика конфиденциальности</p>
+          
+          <div className="pt-8 border-t border-white/5 text-center text-sm text-muted-foreground">
+            <p>ООО Геодезия-БТИ. Все права защищены.</p>
           </div>
         </div>
       </footer>
