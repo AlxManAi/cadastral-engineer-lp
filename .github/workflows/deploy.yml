@@ -16,8 +16,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+      - name: Install Yandex CLI
+        run: |
+          wget https://storage.yandexcloud.net/yandexcloud-yc/install.sh
+          bash install.sh -i /home/runner -n
+          echo 'PATH=/home/runner/yc:$PATH' >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
