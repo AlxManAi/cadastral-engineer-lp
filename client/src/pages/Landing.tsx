@@ -62,6 +62,11 @@ const DEFAULT_CONTENT: ContentData = {
 
 const serviceIcons = [FileText, MapPin, Building, Home, Target, Users];
 
+function getWhatsAppUrl(whatsapp: string): string {
+  if (whatsapp.startsWith('http')) return whatsapp;
+  return `https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`;
+}
+
 export default function Landing() {
   const { data: serverData, isLoading } = useContent();
   
@@ -203,7 +208,7 @@ export default function Landing() {
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </ScrollLink>
-                <a href={`https://wa.me/${content.contact.whatsapp}`} target="_blank" rel="noopener noreferrer">
+                <a href={getWhatsAppUrl(content.contact.whatsapp)} target="_blank" rel="noopener noreferrer">
                   <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-white/20 text-white hover:bg-white/10" data-testid="button-whatsapp">
                     <SiWhatsapp className="w-5 h-5 mr-2 text-green-400" />
                     WhatsApp
@@ -516,7 +521,7 @@ export default function Landing() {
                 {content.contact.phone1}
               </Button>
             </a>
-            <a href={`https://wa.me/${content.contact.whatsapp}`} target="_blank" rel="noopener noreferrer">
+            <a href={getWhatsAppUrl(content.contact.whatsapp)} target="_blank" rel="noopener noreferrer">
               <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-white/30 text-white hover:bg-white/10" data-testid="button-cta-whatsapp">
                 <SiWhatsapp className="w-5 h-5 mr-2" />
                 WhatsApp
@@ -568,7 +573,7 @@ export default function Landing() {
                   </div>
                   <div>
                     <div className="text-sm text-muted-foreground mb-1">WhatsApp</div>
-                    <a href={`https://wa.me/${content.contact.whatsapp}`} target="_blank" rel="noopener noreferrer" className="text-white font-medium hover:text-green-400 transition-colors">Написать в мессенджер</a>
+                    <a href={getWhatsAppUrl(content.contact.whatsapp)} target="_blank" rel="noopener noreferrer" className="text-white font-medium hover:text-green-400 transition-colors" data-testid="link-whatsapp-contact">Написать в мессенджер</a>
                   </div>
                 </div>
 
