@@ -16,6 +16,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget tar
+
       - name: Install Yandex CLI
         run: |
           wget https://storage.yandexcloud.net/yandexcloud-yc/install.sh
@@ -38,4 +43,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:latest 
+          tags: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:latest
