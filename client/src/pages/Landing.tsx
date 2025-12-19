@@ -428,7 +428,7 @@ export default function Landing() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Наши услуги</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Что мы для вас сделаем?</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Полный спектр кадастровых и геодезических работ</p>
           </motion.div>
 
@@ -481,8 +481,8 @@ export default function Landing() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Как мы работаем</h2>
-            <p className="text-xl text-muted-foreground">Простой и понятный процесс от заявки до результата</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Как всё пройдёт?</h2>
+            <p className="text-xl text-muted-foreground">От вашей заявки до готовых документов — просто и понятно</p>
           </motion.div>
           
           <div className="relative">
@@ -490,9 +490,9 @@ export default function Landing() {
             
             <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
               {[
-                { number: "01", title: "Оставляете заявку", text: "Звоните или заполняете форму. Мы бесплатно консультируем и анализируем вашу ситуацию." },
-                { number: "02", title: "Выезд и замеры", text: "Приезжаем на объект, проводим геодезические измерения, собираем необходимые данные." },
-                { number: "03", title: "Готовые документы", text: "Подготавливаем план, подаем в Росреестр, вы получаете выписку ЕГРН." }
+                { number: "01", title: "Вы оставляете заявку", text: "Звоните или заполняете форму — мы перезвоним в течение 5 минут и бесплатно проконсультируем." },
+                { number: "02", title: "Мы выезжаем и делаем замеры", text: "Наш инженер приедет на ваш объект, проведёт все измерения и соберёт нужные данные." },
+                { number: "03", title: "Вы получаете готовые документы", text: "Мы подготовим план, подадим в Росреестр — вам останется только получить выписку ЕГРН." }
               ].map((step, i) => (
                 <motion.div 
                   key={i}
@@ -520,7 +520,7 @@ export default function Landing() {
           >
             <ScrollLink to="contact" smooth={true} offset={-100}>
               <Button size="lg" className="h-14 px-10 text-lg bg-primary hover:bg-primary/90 shadow-xl glow-primary" data-testid="button-process-cta">
-                Начать сейчас
+                Начните сейчас!
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </ScrollLink>
@@ -541,7 +541,7 @@ export default function Landing() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Отзывы наших клиентов</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Что говорят о нас клиенты!</h2>
             <p className="text-xl text-muted-foreground">Нам доверяют более 30 000 собственников недвижимости</p>
           </motion.div>
           
@@ -594,8 +594,8 @@ export default function Landing() {
             <p className="text-xl text-gray-300 mb-10 max-w-xl mx-auto">Задайте свои вопросы прямо сейчас - это совершенно бесплатно</p>
             <div className="flex flex-wrap justify-center gap-4">
               <a href={`tel:${content.contact.phone1.replace(/\s/g, '')}`}>
-                <Button size="lg" className="h-14 px-8 text-lg bg-primary hover:bg-primary/90 shadow-xl neon-glow" data-testid="button-cta-call">
-                  <Phone className="w-5 h-5 mr-2" />
+                <Button size="lg" className="h-16 px-10 text-xl bg-gradient-to-r from-primary via-blue-500 to-primary hover:from-primary/90 hover:via-blue-400 hover:to-primary/90 shadow-2xl border-2 border-primary/50 animate-pulse" data-testid="button-cta-call">
+                  <Phone className="w-6 h-6 mr-3" />
                   {content.contact.phone1}
                 </Button>
               </a>
