@@ -7,7 +7,7 @@ on:
 env:
   YC_REGISTRY: cr.yandex
   YC_FOLDER_ID: b1guembifkv56f8hufi2
-  IMAGE_NAME: landing-app
+  IMAGE_NAME: celp-app-image
 
 jobs:
   build-and-push:
